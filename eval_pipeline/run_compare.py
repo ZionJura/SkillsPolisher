@@ -370,6 +370,13 @@ Examples:
         choices=["mock", "hf", "openai", "claude", "auto"],
         help="BPO rewrite mode (default: mock)",
     )
+    parser.add_argument(
+        "--backend",
+        type=str,
+        default=None,
+        choices=["openai", "azure"],
+        help="LLM backend: 'openai' (zhizengzeng, default) or 'azure' (ByteDance internal, requires VPN)",
+    )
 
     args = parser.parse_args()
 
@@ -377,6 +384,9 @@ Examples:
         args.output = f"compare_{args.dataset}.json"
 
     config = load_config(args.config)
+    if args.backend:
+        config.setdefault("llm", {})["backend"] = args.backend
+        import os; os.environ["LLM_BACKEND"] = args.backend
 
     run_compare(
         dataset_name=args.dataset,

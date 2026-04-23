@@ -374,6 +374,13 @@ Examples:
         help="Use mock LLM client (no API calls, for offline testing)",
     )
     parser.add_argument(
+        "--backend",
+        type=str,
+        default=None,
+        choices=["openai", "azure"],
+        help="LLM backend: 'openai' (zhizengzeng, default) or 'azure' (ByteDance internal, requires VPN)",
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Print each prediction and score",
@@ -400,6 +407,11 @@ Examples:
 
     # Load config
     config = load_config(args.config)
+
+    # Apply --backend override to config
+    if args.backend:
+        config.setdefault("llm", {})["backend"] = args.backend
+        os.environ["LLM_BACKEND"] = args.backend
 
     # Run evaluation
     results = run_evaluation(
