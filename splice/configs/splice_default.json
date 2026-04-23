@@ -1,0 +1,87 @@
+{
+  "_comment": "SPLICE default hyperparameters. Override via CLI args or by passing --config.",
+
+  "bandit": {
+    "delta": 0.05,
+    "epsilon": 0.0,
+    "k_selected": 3,
+    "max_rounds": 100,
+    "n_demo_candidates": 20,
+    "sigma": 0.5,
+    "gap_threshold": 0.3,
+    "_comments": {
+      "delta": "Confidence parameter for CASE gap-index bandit (CASE default: 0.05)",
+      "epsilon": "Stopping tolerance: stop when tau <= epsilon (0.0 = exact top-k)",
+      "k_selected": "Number of top demonstrations to select per task",
+      "max_rounds": "Hard maximum number of bandit sampling rounds",
+      "n_demo_candidates": "Number of demo candidates to pass to the bandit (arm pool size)",
+      "sigma": "Assumed reward noise std for UCB confidence intervals",
+      "gap_threshold": "Secondary gap-index threshold for early stopping"
+    }
+  },
+
+  "rewriter": {
+    "model_id": "THUDM/BPO",
+    "mode": "auto",
+    "load_in_4bit": true,
+    "load_in_8bit": false,
+    "max_new_tokens": 512,
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "openai_model": "gpt-4o-mini",
+    "claude_model": "claude-3-haiku-20240307",
+    "_comments": {
+      "model_id": "HuggingFace model ID for BPO rewriter (THUDM/BPO = LLaMA-2 7B fine-tuned)",
+      "mode": "Backend: 'hf', 'openai', 'claude', or 'auto' (auto-detects GPU/API)",
+      "load_in_4bit": "4-bit quantization for GPU memory efficiency (A100 compatible)",
+      "max_new_tokens": "Maximum tokens to generate for rewritten skill prompt",
+      "temperature": "Sampling temperature for BPO model (0.6 = stable optimization mode)",
+      "openai_model": "OpenAI model name for API fallback",
+      "claude_model": "Anthropic model name for Claude API fallback"
+    }
+  },
+
+  "loop": {
+    "n_rounds": 1,
+    "eval_model": "claude-agent-acp",
+    "eval_mode": "dry_run",
+    "_comments": {
+      "n_rounds": "Number of SPLICE iterative rounds (1 = single-pass, 3 = full iterative)",
+      "eval_model": "BenchFlow agent for bench CLI evaluation",
+      "eval_mode": "Evaluation backend: 'bench_cli', 'openai', 'dry_run'"
+    }
+  },
+
+  "eval": {
+    "bench_timeout_sec": 900,
+    "max_retries": 3,
+    "retry_delay_sec": 2.0,
+    "_comments": {
+      "bench_timeout_sec": "Timeout for bench eval create (SkillsBench task timeout is 900s)",
+      "max_retries": "Number of API call retries on transient errors",
+      "retry_delay_sec": "Base delay between retries (exponential backoff)"
+    }
+  },
+
+  "demo_bank": {
+    "max_tasks": 89,
+    "max_chars_instruction": 8000,
+    "max_chars_skill_body": 6000,
+    "max_chars_invocation": 4000,
+    "_comments": {
+      "max_tasks": "Maximum tasks to include in demo bank (89 = all SkillsBench tasks)",
+      "max_chars_*": "Truncation limits for demo fields to fit in context"
+    }
+  },
+
+  "pilot": {
+    "n_tasks": 10,
+    "methods": ["baseline", "case_only", "splice_full"],
+    "max_bandit_rounds": 30,
+    "_comments": {
+      "n_tasks": "Number of tasks for pilot experiment",
+      "methods": "Methods to compare in pilot",
+      "max_bandit_rounds": "Reduced rounds for pilot speed (<1 hour target)"
+    }
+  }
+}

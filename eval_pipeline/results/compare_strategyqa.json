@@ -1,0 +1,231 @@
+{
+  "dataset": "strategyqa",
+  "split": "test",
+  "n_samples": 5,
+  "seed": 42,
+  "mock": true,
+  "baselines": [
+    {
+      "baseline": "zero_shot",
+      "n_samples": 5,
+      "accuracy": 0.0,
+      "avg_score": 0.0,
+      "results": [
+        {
+          "id": "36c497860f72d148e4e8",
+          "question": "Are Donkeys part of Christmas celebrations?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "10bcf9c1d9026f741f75",
+          "question": "Can the Supreme Court of Canada fight a Lucha trios match?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "962d64c181ab75e0ace2",
+          "question": "Could you windsurf in Puerto Rico during Hurricane Maria?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "bd06ae2cc099d8394c83",
+          "question": "Is Bill Gates the wealthiest of the Baby Boomers?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "267f910d8ce95e51d64a",
+          "question": "Did The Who have to cancel tours due to World War II?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        }
+      ],
+      "n_calls": 5,
+      "total_tokens": 274,
+      "elapsed_s": 0.00019431114196777344
+    },
+    {
+      "baseline": "random_kshot",
+      "n_samples": 5,
+      "accuracy": 0.0,
+      "avg_score": 0.0,
+      "results": [
+        {
+          "id": "36c497860f72d148e4e8",
+          "question": "Are Donkeys part of Christmas celebrations?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "10bcf9c1d9026f741f75",
+          "question": "Can the Supreme Court of Canada fight a Lucha trios match?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "962d64c181ab75e0ace2",
+          "question": "Could you windsurf in Puerto Rico during Hurricane Maria?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "bd06ae2cc099d8394c83",
+          "question": "Is Bill Gates the wealthiest of the Baby Boomers?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "267f910d8ce95e51d64a",
+          "question": "Did The Who have to cancel tours due to World War II?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        }
+      ],
+      "n_calls": 5,
+      "total_tokens": 818,
+      "elapsed_s": 5.459785461425781e-05
+    },
+    {
+      "baseline": "case_bandit",
+      "n_samples": 5,
+      "accuracy": 0.0,
+      "avg_score": 0.0,
+      "results": [
+        {
+          "id": "36c497860f72d148e4e8",
+          "question": "Are Donkeys part of Christmas celebrations?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "10bcf9c1d9026f741f75",
+          "question": "Can the Supreme Court of Canada fight a Lucha trios match?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "962d64c181ab75e0ace2",
+          "question": "Could you windsurf in Puerto Rico during Hurricane Maria?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "bd06ae2cc099d8394c83",
+          "question": "Is Bill Gates the wealthiest of the Baby Boomers?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "267f910d8ce95e51d64a",
+          "question": "Did The Who have to cancel tours due to World War II?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        }
+      ],
+      "n_calls": 5,
+      "total_tokens": 736,
+      "elapsed_s": 0.022597789764404297
+    },
+    {
+      "baseline": "bpo_rewrite",
+      "n_samples": 5,
+      "accuracy": 0.0,
+      "avg_score": 0.0,
+      "results": [
+        {
+          "id": "36c497860f72d148e4e8",
+          "question": "Are Donkeys part of Christmas celebrations?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "10bcf9c1d9026f741f75",
+          "question": "Can the Supreme Court of Canada fight a Lucha trios match?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "yes",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "962d64c181ab75e0ace2",
+          "question": "Could you windsurf in Puerto Rico during Hurricane Maria?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "bd06ae2cc099d8394c83",
+          "question": "Is Bill Gates the wealthiest of the Baby Boomers?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        },
+        {
+          "id": "267f910d8ce95e51d64a",
+          "question": "Did The Who have to cancel tours due to World War II?",
+          "prediction": "[MOCK RESPONSE]",
+          "answer": "no",
+          "correct": false,
+          "score": 0.0
+        }
+      ],
+      "n_calls": 5,
+      "total_tokens": 235,
+      "elapsed_s": 0.003996610641479492
+    }
+  ],
+  "summary": {
+    "zero_shot": {
+      "accuracy": 0.0,
+      "avg_score": 0.0
+    },
+    "random_kshot": {
+      "accuracy": 0.0,
+      "avg_score": 0.0
+    },
+    "case_bandit": {
+      "accuracy": 0.0,
+      "avg_score": 0.0
+    },
+    "bpo_rewrite": {
+      "accuracy": 0.0,
+      "avg_score": 0.0
+    }
+  }
+}

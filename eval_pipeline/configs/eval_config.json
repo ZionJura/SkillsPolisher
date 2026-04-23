@@ -1,0 +1,22 @@
+{
+  "llm": {
+    "base_url": "https://api.zhizengzeng.com/v1",
+    "api_key": "sk-zk218fe5b9b393541e35b39f29f083a22ec69c91a6228740",
+    "model": "gpt-4o-2024-11-20",
+    "max_tokens": 2048,
+    "temperature": 0.0
+  },
+  "model_tiers": {
+    "fast":      "gpt-4o-mini",
+    "standard":  "gpt-4o-2024-11-20",
+    "strong":    "gpt-4.1",
+    "reasoning": "o4-mini",
+    "best":      "gpt-5.4-pro",
+    "claude":    "claude-sonnet-4-6",
+    "gemini":    "gemini-2.5-pro",
+    "deepseek":  "deepseek-v3"
+  },
+  "data_root": "/mnt/d/Code/AI4R/Skills-Learning2/related-works",
+  "splice_root": "/mnt/d/Code/AI4R/Skills-Learning2/splice",
+  "results_dir": "/mnt/d/Code/AI4R/Skills-Learning2/eval_pipeline/results"
+}

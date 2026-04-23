@@ -1,0 +1,2222 @@
+{
+  "experiment": "splice_pilot",
+  "timestamp": "2026-04-21T15:10:41.747851+00:00",
+  "config": {
+    "eval_mode": "dry_run",
+    "rewriter_mode": "mock",
+    "task_ids": [
+      "3d-scan-calc",
+      "adaptive-cruise-control",
+      "citation-check",
+      "civ6-adjacency-optimizer",
+      "court-form-filling",
+      "data-to-d3",
+      "dialogue-parser",
+      "earthquake-phase-association",
+      "earthquake-plate-calculation",
+      "econ-detrending-correlation"
+    ],
+    "methods": [
+      "baseline",
+      "case_only",
+      "splice_full"
+    ],
+    "k": 3,
+    "delta": 0.05,
+    "max_bandit_rounds": 30
+  },
+  "total_time_sec": 1.25,
+  "summary": {
+    "baseline": {
+      "n_tasks": 10,
+      "success_rate": 0.5,
+      "std": 0.527,
+      "n_success": 5,
+      "n_failure": 5
+    },
+    "case_only": {
+      "n_tasks": 10,
+      "success_rate": 0.4,
+      "std": 0.5164,
+      "n_success": 4,
+      "n_failure": 6
+    },
+    "splice_full": {
+      "n_tasks": 10,
+      "success_rate": 0.8,
+      "std": 0.4216,
+      "n_success": 8,
+      "n_failure": 2
+    }
+  },
+  "results_by_method": {
+    "baseline": [
+      {
+        "task_id": "3d-scan-calc",
+        "reward": 0.0,
+        "elapsed_sec": 0.011007582766279724,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "adaptive-cruise-control",
+        "reward": 1.0,
+        "elapsed_sec": 0.04716728251069211,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "citation-check",
+        "reward": 1.0,
+        "elapsed_sec": 0.02833404350911356,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "civ6-adjacency-optimizer",
+        "reward": 1.0,
+        "elapsed_sec": 0.043925856388993656,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "court-form-filling",
+        "reward": 1.0,
+        "elapsed_sec": 0.035712370106164446,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "data-to-d3",
+        "reward": 0.0,
+        "elapsed_sec": 0.03098785895013533,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "dialogue-parser",
+        "reward": 0.0,
+        "elapsed_sec": 0.02653276385492208,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "earthquake-phase-association",
+        "reward": 1.0,
+        "elapsed_sec": 0.04218794568337597,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "earthquake-plate-calculation",
+        "reward": 0.0,
+        "elapsed_sec": 0.028191555765769906,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "econ-detrending-correlation",
+        "reward": 0.0,
+        "elapsed_sec": 0.03265856583635349,
+        "error": "",
+        "n_demos": 0,
+        "was_rewritten": false
+      }
+    ],
+    "case_only": [
+      {
+        "task_id": "3d-scan-calc",
+        "reward": 0.0,
+        "elapsed_sec": 0.0373862389696487,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "adaptive-cruise-control",
+        "reward": 1.0,
+        "elapsed_sec": 0.027945018750483483,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "citation-check",
+        "reward": 0.0,
+        "elapsed_sec": 0.04536610331377766,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "civ6-adjacency-optimizer",
+        "reward": 0.0,
+        "elapsed_sec": 0.049515936541237024,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "court-form-filling",
+        "reward": 1.0,
+        "elapsed_sec": 0.048431979525741346,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "data-to-d3",
+        "reward": 0.0,
+        "elapsed_sec": 0.04695834912793476,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "dialogue-parser",
+        "reward": 0.0,
+        "elapsed_sec": 0.03820959207815831,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "earthquake-phase-association",
+        "reward": 1.0,
+        "elapsed_sec": 0.01460726513514858,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "earthquake-plate-calculation",
+        "reward": 1.0,
+        "elapsed_sec": 0.02814909354017707,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      },
+      {
+        "task_id": "econ-detrending-correlation",
+        "reward": 0.0,
+        "elapsed_sec": 0.04328127494144739,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": false
+      }
+    ],
+    "splice_full": [
+      {
+        "task_id": "3d-scan-calc",
+        "reward": 1.0,
+        "elapsed_sec": 0.022966957535924228,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "adaptive-cruise-control",
+        "reward": 1.0,
+        "elapsed_sec": 0.0400762486266298,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "citation-check",
+        "reward": 0.0,
+        "elapsed_sec": 0.02320871669744116,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "civ6-adjacency-optimizer",
+        "reward": 1.0,
+        "elapsed_sec": 0.03257615615814917,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "court-form-filling",
+        "reward": 1.0,
+        "elapsed_sec": 0.038983876880880265,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "data-to-d3",
+        "reward": 0.0,
+        "elapsed_sec": 0.03630784597079977,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "dialogue-parser",
+        "reward": 1.0,
+        "elapsed_sec": 0.02021378358210347,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "earthquake-phase-association",
+        "reward": 1.0,
+        "elapsed_sec": 0.014887104019227855,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "earthquake-plate-calculation",
+        "reward": 1.0,
+        "elapsed_sec": 0.01024470841330455,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      },
+      {
+        "task_id": "econ-detrending-correlation",
+        "reward": 1.0,
+        "elapsed_sec": 0.029025637954880987,
+        "error": "",
+        "n_demos": 3,
+        "was_rewritten": true
+      }
+    ]
+  },
+  "full_task_results": [
+    {
+      "task_id": "3d-scan-calc",
+      "results": {
+        "baseline": {
+          "task_id": "3d-scan-calc",
+          "reward": 0.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.011007582766279724,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.033,
+          "timestamp": "2026-04-21T15:10:40.550727+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "3d-scan-calc",
+          "reward": 0.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.0373862389696487,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.037,
+          "timestamp": "2026-04-21T15:10:40.587630+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "financial-modeling-qa",
+            "exceltable-in-ppt",
+            "data-to-d3"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              1.0,
+              0.0,
+              1.0,
+              0.6666666666666666,
+              1.0
+            ],
+            "counts": [
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              3.0,
+              3.0
+            ],
+            "current_J": [
+              19,
+              17,
+              7
+            ],
+            "tau_ugape": 2.1187037093630865,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              19,
+              17,
+              7
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "3d-scan-calc",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.022966957535924228,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.035,
+          "timestamp": "2026-04-21T15:10:40.622779+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "exoplanet-detection-period",
+            "crystallographic-wyckoff-position-analysis",
+            "financial-modeling-qa"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              1.0,
+              0.6666666666666666
+            ],
+            "counts": [
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              3.0
+            ],
+            "current_J": [
+              18,
+              5,
+              19
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              18,
+              5,
+              19
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "adaptive-cruise-control",
+      "results": {
+        "baseline": {
+          "task_id": "adaptive-cruise-control",
+          "reward": 1.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.04716728251069211,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.053,
+          "timestamp": "2026-04-21T15:10:40.676056+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "adaptive-cruise-control",
+          "reward": 1.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.027945018750483483,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.057,
+          "timestamp": "2026-04-21T15:10:40.732849+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "enterprise-information-search",
+            "dynamic-object-aware-egomotion",
+            "energy-ac-optimal-power-flow"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.5,
+              0.5,
+              0.0,
+              1.0,
+              0.0,
+              0.5,
+              0.0,
+              1.0,
+              1.0,
+              0.5,
+              1.0,
+              0.5,
+              0.5,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "counts": [
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "current_J": [
+              16,
+              9,
+              14
+            ],
+            "tau_ugape": 2.557501614897274,
+            "gap_index": 0.4387979055341873,
+            "converged": true,
+            "top_k_arms": [
+              16,
+              9,
+              14
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "adaptive-cruise-control",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.0400762486266298,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.057,
+          "timestamp": "2026-04-21T15:10:40.789380+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "enterprise-information-search",
+            "civ6-adjacency-optimizer",
+            "azure-bgp-oscillation-route-leak"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.5,
+              1.0,
+              0.5,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              1.0,
+              0.0,
+              1.0,
+              0.5,
+              0.6666666666666666,
+              0.0
+            ],
+            "counts": [
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              3.0,
+              1.0
+            ],
+            "current_J": [
+              16,
+              3,
+              1
+            ],
+            "tau_ugape": 2.1187037093630865,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              16,
+              3,
+              1
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "citation-check",
+      "results": {
+        "baseline": {
+          "task_id": "citation-check",
+          "reward": 1.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.02833404350911356,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.049,
+          "timestamp": "2026-04-21T15:10:40.838035+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "citation-check",
+          "reward": 0.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.04536610331377766,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.053,
+          "timestamp": "2026-04-21T15:10:40.890820+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "data-to-d3",
+            "3d-scan-calc",
+            "dynamic-object-aware-egomotion"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              1.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.5
+            ],
+            "counts": [
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              3.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              3.0,
+              1.0,
+              2.0
+            ],
+            "current_J": [
+              7,
+              0,
+              9
+            ],
+            "tau_ugape": 1.6187037093630865,
+            "gap_index": 0.30560531266538193,
+            "converged": true,
+            "top_k_arms": [
+              7,
+              0,
+              9
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "citation-check",
+          "reward": 0.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.02320871669744116,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.053,
+          "timestamp": "2026-04-21T15:10:40.943953+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "adaptive-cruise-control",
+            "energy-market-pricing",
+            "econ-detrending-correlation"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.6666666666666666,
+              1.0,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "counts": [
+              3.0,
+              2.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "current_J": [
+              1,
+              15,
+              12
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              1,
+              15,
+              12
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "civ6-adjacency-optimizer",
+      "results": {
+        "baseline": {
+          "task_id": "civ6-adjacency-optimizer",
+          "reward": 1.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.043925856388993656,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.064,
+          "timestamp": "2026-04-21T15:10:41.007680+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "civ6-adjacency-optimizer",
+          "reward": 0.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.049515936541237024,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.063,
+          "timestamp": "2026-04-21T15:10:41.070933+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "financial-modeling-qa",
+            "exoplanet-detection-period",
+            "crystallographic-wyckoff-position-analysis"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.0,
+              1.0,
+              0.5,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.5,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              0.0,
+              1.0,
+              1.0
+            ],
+            "counts": [
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0
+            ],
+            "current_J": [
+              19,
+              18,
+              5
+            ],
+            "tau_ugape": 2.1187037093630865,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              19,
+              18,
+              5
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "civ6-adjacency-optimizer",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.03257615615814917,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.063,
+          "timestamp": "2026-04-21T15:10:41.134329+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "3d-scan-calc",
+            "dynamic-object-aware-egomotion",
+            "earthquake-plate-calculation"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              1.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              1.0,
+              0.5,
+              1.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0
+            ],
+            "counts": [
+              2.0,
+              3.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0
+            ],
+            "current_J": [
+              0,
+              9,
+              11
+            ],
+            "tau_ugape": 2.1187037093630865,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              0,
+              9,
+              11
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "court-form-filling",
+      "results": {
+        "baseline": {
+          "task_id": "court-form-filling",
+          "reward": 1.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.035712370106164446,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.031,
+          "timestamp": "2026-04-21T15:10:41.164986+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "court-form-filling",
+          "reward": 1.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.048431979525741346,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.034,
+          "timestamp": "2026-04-21T15:10:41.198835+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "adaptive-cruise-control",
+            "data-to-d3",
+            "citation-check"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.5,
+              1.0,
+              0.0,
+              1.0,
+              0.5,
+              0.5,
+              0.0,
+              1.0,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5
+            ],
+            "counts": [
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0
+            ],
+            "current_J": [
+              1,
+              7,
+              3
+            ],
+            "tau_ugape": 1.6187037093630865,
+            "gap_index": 0.5,
+            "converged": true,
+            "top_k_arms": [
+              1,
+              7,
+              3
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "court-form-filling",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.038983876880880265,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.034,
+          "timestamp": "2026-04-21T15:10:41.232394+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "edit-pdf",
+            "econ-detrending-correlation",
+            "exoplanet-detection-period"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.6666666666666666,
+              0.0
+            ],
+            "counts": [
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              3.0,
+              1.0
+            ],
+            "current_J": [
+              13,
+              12,
+              18
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              13,
+              12,
+              18
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "data-to-d3",
+      "results": {
+        "baseline": {
+          "task_id": "data-to-d3",
+          "reward": 0.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.03098785895013533,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.03,
+          "timestamp": "2026-04-21T15:10:41.262620+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "data-to-d3",
+          "reward": 0.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.04695834912793476,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.034,
+          "timestamp": "2026-04-21T15:10:41.296715+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "adaptive-cruise-control",
+            "energy-market-pricing",
+            "earthquake-plate-calculation"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              1.0,
+              0.0,
+              0.6666666666666666,
+              0.3333333333333333,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5
+            ],
+            "counts": [
+              1.0,
+              2.0,
+              1.0,
+              3.0,
+              3.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0
+            ],
+            "current_J": [
+              1,
+              15,
+              11
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              1,
+              15,
+              11
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "data-to-d3",
+          "reward": 0.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.03630784597079977,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.034,
+          "timestamp": "2026-04-21T15:10:41.330864+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "citation-check",
+            "dialogue-parser",
+            "earthquake-phase-association"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              1.0,
+              0.6666666666666666,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              0.0
+            ],
+            "counts": [
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              2.0,
+              3.0,
+              3.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0
+            ],
+            "current_J": [
+              3,
+              8,
+              10
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              3,
+              8,
+              10
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "dialogue-parser",
+      "results": {
+        "baseline": {
+          "task_id": "dialogue-parser",
+          "reward": 0.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.02653276385492208,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.031,
+          "timestamp": "2026-04-21T15:10:41.361977+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "dialogue-parser",
+          "reward": 0.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.03820959207815831,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.033,
+          "timestamp": "2026-04-21T15:10:41.395195+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "exceltable-in-ppt",
+            "citation-check",
+            "dapt-intrusion-detection"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.0,
+              0.5,
+              0.6666666666666666,
+              0.3333333333333333,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.3333333333333333,
+              0.0,
+              0.5,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "counts": [
+              1.0,
+              1.0,
+              2.0,
+              3.0,
+              3.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0
+            ],
+            "current_J": [
+              17,
+              3,
+              7
+            ],
+            "tau_ugape": 2.1187037093630865,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              17,
+              3,
+              7
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "dialogue-parser",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.02021378358210347,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.034,
+          "timestamp": "2026-04-21T15:10:41.428861+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "azure-bgp-oscillation-route-leak",
+            "energy-ac-optimal-power-flow",
+            "edit-pdf"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.6666666666666666,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.75,
+              1.0,
+              0.0,
+              0.0,
+              0.3333333333333333,
+              0.0,
+              0.0
+            ],
+            "counts": [
+              1.0,
+              3.0,
+              3.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              4.0,
+              2.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0
+            ],
+            "current_J": [
+              2,
+              14,
+              13
+            ],
+            "tau_ugape": 1.5909756886951352,
+            "gap_index": 0.03254895390572665,
+            "converged": true,
+            "top_k_arms": [
+              2,
+              14,
+              13
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "earthquake-phase-association",
+      "results": {
+        "baseline": {
+          "task_id": "earthquake-phase-association",
+          "reward": 1.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.04218794568337597,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.053,
+          "timestamp": "2026-04-21T15:10:41.481405+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "earthquake-phase-association",
+          "reward": 1.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.01460726513514858,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.057,
+          "timestamp": "2026-04-21T15:10:41.538089+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "citation-check",
+            "dialogue-parser",
+            "court-form-filling"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.3333333333333333,
+              0.3333333333333333,
+              1.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5
+            ],
+            "counts": [
+              1.0,
+              3.0,
+              3.0,
+              2.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0
+            ],
+            "current_J": [
+              3,
+              9,
+              5
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              3,
+              9,
+              5
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "earthquake-phase-association",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.014887104019227855,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.058,
+          "timestamp": "2026-04-21T15:10:41.595717+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "civ6-adjacency-optimizer",
+            "court-form-filling",
+            "earthquake-plate-calculation"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.5,
+              1.0,
+              0.0,
+              0.5,
+              0.0,
+              1.0,
+              0.0,
+              0.5,
+              0.0,
+              0.5
+            ],
+            "counts": [
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0
+            ],
+            "current_J": [
+              4,
+              5,
+              11
+            ],
+            "tau_ugape": 2.1187037093630865,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              4,
+              5,
+              11
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "earthquake-plate-calculation",
+      "results": {
+        "baseline": {
+          "task_id": "earthquake-plate-calculation",
+          "reward": 0.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.028191555765769906,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.024,
+          "timestamp": "2026-04-21T15:10:41.619798+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "earthquake-plate-calculation",
+          "reward": 1.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.02814909354017707,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.027,
+          "timestamp": "2026-04-21T15:10:41.646548+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "azure-bgp-oscillation-route-leak",
+            "citation-check",
+            "dialogue-parser"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.5,
+              0.0,
+              1.0,
+              1.0,
+              0.5,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.5,
+              0.0,
+              0.5,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5
+            ],
+            "counts": [
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0
+            ],
+            "current_J": [
+              2,
+              3,
+              9
+            ],
+            "tau_ugape": 2.557501614897274,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              2,
+              3,
+              9
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "earthquake-plate-calculation",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.01024470841330455,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.027,
+          "timestamp": "2026-04-21T15:10:41.673161+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "exceltable-in-ppt",
+            "dynamic-object-aware-egomotion",
+            "econ-detrending-correlation"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.3333333333333333,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              0.3333333333333333,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.5
+            ],
+            "counts": [
+              3.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              3.0,
+              1.0,
+              3.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0
+            ],
+            "current_J": [
+              17,
+              10,
+              12
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              17,
+              10,
+              12
+            ]
+          }
+        }
+      }
+    },
+    {
+      "task_id": "econ-detrending-correlation",
+      "results": {
+        "baseline": {
+          "task_id": "econ-detrending-correlation",
+          "reward": 0.0,
+          "method": "baseline",
+          "mode": "dry_run",
+          "elapsed_sec": 0.03265856583635349,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.4,
+            "n_demos": 0,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.023,
+          "timestamp": "2026-04-21T15:10:41.696398+00:00",
+          "n_demos_selected": 0,
+          "demo_task_ids": [],
+          "was_rewritten": false,
+          "bandit_diagnostics": null
+        },
+        "case_only": {
+          "task_id": "econ-detrending-correlation",
+          "reward": 0.0,
+          "method": "case_only",
+          "mode": "dry_run",
+          "elapsed_sec": 0.04328127494144739,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.55,
+            "n_demos": 3,
+            "has_rewrite": false
+          },
+          "total_elapsed_sec": 0.026,
+          "timestamp": "2026-04-21T15:10:41.722167+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "financial-modeling-qa",
+            "dialogue-parser",
+            "edit-pdf"
+          ],
+          "was_rewritten": false,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.5,
+              0.0,
+              0.5,
+              0.5,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.5,
+              0.5,
+              1.0
+            ],
+            "counts": [
+              2.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              2.0,
+              2.0
+            ],
+            "current_J": [
+              19,
+              9,
+              13
+            ],
+            "tau_ugape": 2.557501614897274,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              19,
+              9,
+              13
+            ]
+          }
+        },
+        "splice_full": {
+          "task_id": "econ-detrending-correlation",
+          "reward": 1.0,
+          "method": "splice_full",
+          "mode": "dry_run",
+          "elapsed_sec": 0.029025637954880987,
+          "error": "",
+          "metadata": {
+            "success_prob": 0.63,
+            "n_demos": 3,
+            "has_rewrite": true
+          },
+          "total_elapsed_sec": 0.025,
+          "timestamp": "2026-04-21T15:10:41.747418+00:00",
+          "n_demos_selected": 3,
+          "demo_task_ids": [
+            "azure-bgp-oscillation-route-leak",
+            "earthquake-plate-calculation",
+            "exoplanet-detection-period"
+          ],
+          "was_rewritten": true,
+          "bandit_diagnostics": {
+            "t": 30,
+            "n_arms": 20,
+            "k": 3,
+            "empirical_means": [
+              0.6666666666666666,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0,
+              1.0,
+              0.0,
+              0.5,
+              0.0,
+              0.0,
+              0.0,
+              0.6666666666666666,
+              0.0
+            ],
+            "counts": [
+              3.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0,
+              2.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              1.0,
+              3.0,
+              1.0
+            ],
+            "current_J": [
+              2,
+              12,
+              18
+            ],
+            "tau_ugape": 1.757642355361802,
+            "gap_index": 0.0,
+            "converged": true,
+            "top_k_arms": [
+              2,
+              12,
+              18
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

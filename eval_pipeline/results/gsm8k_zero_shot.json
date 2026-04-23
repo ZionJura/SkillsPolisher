@@ -1,0 +1,67 @@
+{
+  "dataset": "gsm8k",
+  "split": "test",
+  "baseline": "zero_shot",
+  "n_samples": 5,
+  "accuracy": 0.0,
+  "avg_score": 0.0,
+  "results": [
+    {
+      "id": "gsm8k_test_51",
+      "question": "Tom's ship can travel at 10 miles per hour.  He is sailing from 1 to 4 PM.  He then travels back at a rate of 6 mph.  How long does it take him to get back?",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "5",
+      "correct": false,
+      "score": 0.0,
+      "details": "no_match: pred='mock response', true='5'"
+    },
+    {
+      "id": "gsm8k_test_228",
+      "question": "Kalinda is working on a 360 piece puzzle with her mom. Kalinda can normally add 4 pieces per minute. Her mom can typically place half as many pieces per minute as Kalinda.  How many hours will it take",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "1",
+      "correct": false,
+      "score": 0.0,
+      "details": "no_match: pred='mock response', true='1'"
+    },
+    {
+      "id": "gsm8k_test_501",
+      "question": "Mariah’s grandma was teaching her to knit. Mariah used 1/4 of a skein of yarn. Her grandma used 1/2 of a skein of yarn. There are 364 yards in a skein of yarn. How many yards of yarn did they use alto",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "273",
+      "correct": false,
+      "score": 0.0,
+      "details": "no_match: pred='mock response', true='273'"
+    },
+    {
+      "id": "gsm8k_test_563",
+      "question": "James decides to buy birthday candles for his 2 sons.  One of them is 12 and the other is 4 years younger.  A pack of 5 candles costs $3.  How much does James spend on candles?",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "12",
+      "correct": false,
+      "score": 0.0,
+      "details": "no_match: pred='mock response', true='12'"
+    },
+    {
+      "id": "gsm8k_test_1309",
+      "question": "The girls are trying to raise money for a carnival. Kim raises $320 more than Alexandra, who raises $430, and Maryam raises $400 more than Sarah, who raises $300. How much money, in dollars, did they ",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "2280",
+      "correct": false,
+      "score": 0.0,
+      "details": "no_match: pred='mock response', true='2280'"
+    }
+  ],
+  "cost": {
+    "total_tokens": 548,
+    "prompt_tokens": 498,
+    "completion_tokens": 50,
+    "n_calls": 5
+  },
+  "config": {
+    "k": 3,
+    "seed": 42,
+    "mock": true,
+    "elapsed_seconds": 0.0004994869232177734
+  }
+}

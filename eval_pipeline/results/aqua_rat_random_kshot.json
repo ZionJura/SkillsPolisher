@@ -1,0 +1,67 @@
+{
+  "dataset": "aqua_rat",
+  "split": "dev",
+  "baseline": "random_kshot",
+  "n_samples": 5,
+  "accuracy": 0.0,
+  "avg_score": 0.0,
+  "results": [
+    {
+      "id": "aqua_dev_6",
+      "question": "A group of 5 friends were to contribute equally to purchase items from a store. If store offered them a promotional discount of 15%, how much did each friend pay, given a total bill of $ 1200?",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "E",
+      "correct": false,
+      "score": 0.0,
+      "details": "pred_letter='', true_letter='E'"
+    },
+    {
+      "id": "aqua_dev_28",
+      "question": "On sports day, if 24 children were made to stand in a column, then 10 columns could be formed. If 240 children were made to stand in a column, then how many columns could be formed?",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "E",
+      "correct": false,
+      "score": 0.0,
+      "details": "pred_letter='', true_letter='E'"
+    },
+    {
+      "id": "aqua_dev_70",
+      "question": "The least possible value of |89 - 9a|, where a is an integer, is",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "B",
+      "correct": false,
+      "score": 0.0,
+      "details": "pred_letter='', true_letter='B'"
+    },
+    {
+      "id": "aqua_dev_163",
+      "question": "The binary representation of 0.6875 is ?",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "B",
+      "correct": false,
+      "score": 0.0,
+      "details": "pred_letter='', true_letter='B'"
+    },
+    {
+      "id": "aqua_dev_189",
+      "question": "A, B and C start at the same time in the same direction to run around a circular stadium. A completes a round in 252 seconds, B in 308 seconds and c in 198 seconds, all starting at the same point. Aft",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "D",
+      "correct": false,
+      "score": 0.0,
+      "details": "pred_letter='', true_letter='D'"
+    }
+  ],
+  "cost": {
+    "total_tokens": 1467,
+    "prompt_tokens": 1417,
+    "completion_tokens": 50,
+    "n_calls": 5
+  },
+  "config": {
+    "k": 3,
+    "seed": 42,
+    "mock": true,
+    "elapsed_seconds": 0.002606630325317383
+  }
+}

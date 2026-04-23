@@ -1,0 +1,58 @@
+# ── Third-party related works (large datasets, videos, third-party code) ──────
+related-works/
+
+# ── Python cache ──────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Large data / binary files ─────────────────────────────────────────────────
+*.csv
+*.jsonl
+*.zip
+*.tar.gz
+*.mp4
+*.mp3
+*.wav
+*.avi
+*.mov
+*.pdf
+*.pptx
+*.pcap
+*.mseed
+*.stl
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# ── But DO keep our small config/result JSONs ─────────────────────────────────
+!splice/configs/*.json
+!splice/results/pilot_results.json
+!eval_pipeline/configs/eval_config.json
+!eval_pipeline/results/
+
+# ── Jupyter / IDE ─────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── OS artifacts ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Secrets / env (just in case) ─────────────────────────────────────────────
+.env
+*.key

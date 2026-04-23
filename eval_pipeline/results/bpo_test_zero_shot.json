@@ -1,0 +1,49 @@
+{
+  "dataset": "bpo_test",
+  "split": "test",
+  "baseline": "zero_shot",
+  "n_samples": 3,
+  "accuracy": 0.0,
+  "avg_score": 0.0,
+  "results": [
+    {
+      "id": "bpo_test_6",
+      "question": "Generate a creative way of advertising a new razor product.",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "Looking for a smooth, clean shave that leaves your skin feeling silky soft? Try our new razor product, designed with advanced technology for an unbeatable glide. Our razor boasts five blades for a clo",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_ambiguous: [MOCK RESPONSE]"
+    },
+    {
+      "id": "bpo_test_28",
+      "question": "Classification the following object\nWheel",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "Wheel is an object classified as a mechanical component used for transportation. More specifically, it is a round object that rotates around an axle and facilitates movement, commonly used in vehicles",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_ambiguous: [MOCK RESPONSE]"
+    },
+    {
+      "id": "bpo_test_163",
+      "question": "Help me write a typescript signature for a method where the type of the second parameter is different depending on the string value of the first parameter. Thanks!",
+      "prediction": "[MOCK RESPONSE]",
+      "answer": "Sure, here is an example of a type signature for a method that takes a string parameter and returns a different type depending on the value of the first parameter:\n```\ntype StringValue<T> = T extends ",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_ambiguous: [MOCK RESPONSE]"
+    }
+  ],
+  "cost": {
+    "total_tokens": 1405,
+    "prompt_tokens": 1345,
+    "completion_tokens": 60,
+    "n_calls": 6
+  },
+  "config": {
+    "k": 3,
+    "seed": 42,
+    "mock": true,
+    "elapsed_seconds": 0.00012922286987304688
+  }
+}
