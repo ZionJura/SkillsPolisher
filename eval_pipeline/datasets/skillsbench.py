@@ -11,8 +11,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from .base import EvalDataset, EvalSample
-
-SKILLSBENCH_ROOT = "/mnt/d/Code/AI4R/Skills-Learning2/related-works/skillsbench/tasks"
+from .data_utils import resolve_data_path
 
 
 def _load_toml(path: str) -> dict:
@@ -110,7 +109,7 @@ class SkillsBenchDataset(EvalDataset):
 
     def __init__(self, split: str = "test", data_root: Optional[str] = None):
         self.split = split
-        self.data_root = data_root or SKILLSBENCH_ROOT
+        self.data_root = str(data_root or resolve_data_path("skillsbench"))
         self._samples: List[EvalSample] = []
         self._load()
 

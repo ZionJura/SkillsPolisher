@@ -11,8 +11,7 @@ import os
 from typing import List, Optional
 
 from .base import EvalDataset, EvalSample
-
-DEMO_BANK_PATH = "/mnt/d/Code/AI4R/Skills-Learning2/splice/data/demo_bank.json"
+from .data_utils import resolve_data_path
 
 
 class DemoBankDataset(EvalDataset):
@@ -24,7 +23,12 @@ class DemoBankDataset(EvalDataset):
 
     def __init__(self, split: str = "train", data_path: Optional[str] = None):
         self.split = split
-        self.data_path = data_path or DEMO_BANK_PATH
+        if data_path:
+            self.data_path = str(data_path)
+        else:
+            # resolve_data_path returns the data/demo_bank/ dir; the file is inside it
+            _dir = resolve_data_path("demo_bank")
+            self.data_path = str(_dir / "demo_bank.json") if _dir.is_dir() else str(_dir)
         self._samples: List[EvalSample] = []
         self._raw_demos: List[dict] = []
         self._load()

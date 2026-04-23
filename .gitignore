@@ -1,5 +1,9 @@
 # ── Third-party related works (large datasets, videos, third-party code) ──────
 related-works/
+related-works
+
+# ── Claude local settings ─────────────────────────────────────────────────────
+.claude/
 
 # ── Python cache ──────────────────────────────────────────────────────────────
 __pycache__/

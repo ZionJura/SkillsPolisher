@@ -12,8 +12,7 @@ import os
 from typing import List, Optional
 
 from .base import EvalDataset, EvalSample
-
-BPO_ROOT = "/mnt/d/Code/AI4R/Skills-Learning2/related-works/BPO/data/testset"
+from .data_utils import resolve_data_path
 
 
 class BPOTestDataset(EvalDataset):
@@ -26,7 +25,7 @@ class BPOTestDataset(EvalDataset):
 
     def __init__(self, split: str = "test", data_root: Optional[str] = None):
         self.split = split
-        self.data_root = data_root or BPO_ROOT
+        self.data_root = str(data_root or resolve_data_path("bpo"))
         self.file_path = os.path.join(self.data_root, "bpo_test.json")
         self._samples: List[EvalSample] = []
         self._load()
@@ -86,7 +85,7 @@ class DollyEvalDataset(EvalDataset):
 
     def __init__(self, split: str = "test", data_root: Optional[str] = None):
         self.split = split
-        self.data_root = data_root or BPO_ROOT
+        self.data_root = str(data_root or resolve_data_path("bpo"))
         self.file_path = os.path.join(self.data_root, "dolly_eval.json")
         self._samples: List[EvalSample] = []
         self._load()
@@ -154,7 +153,7 @@ class SelfInstructEvalDataset(EvalDataset):
 
     def __init__(self, split: str = "test", data_root: Optional[str] = None):
         self.split = split
-        self.data_root = data_root or BPO_ROOT
+        self.data_root = str(data_root or resolve_data_path("bpo"))
         self.file_path = os.path.join(self.data_root, "self_instruct_eval.json")
         self._samples: List[EvalSample] = []
         self._load()

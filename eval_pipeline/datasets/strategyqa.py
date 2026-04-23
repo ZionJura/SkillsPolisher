@@ -10,11 +10,7 @@ import os
 from typing import List, Optional
 
 from .base import EvalDataset, EvalSample
-
-STRATEGYQA_ROOT = (
-    "/mnt/d/Code/AI4R/Skills-Learning2/related-works/CASE/Code/"
-    "LLM_experiments/data/Strategyqa"
-)
+from .data_utils import resolve_data_path
 
 SPLIT_FILES = {
     "train": "strategyqa_train.csv",
@@ -57,7 +53,7 @@ class StrategyQADataset(EvalDataset):
 
     def __init__(self, split: str = "test", data_root: Optional[str] = None):
         self.split = split
-        self.data_root = data_root or STRATEGYQA_ROOT
+        self.data_root = str(data_root or resolve_data_path("strategyqa"))
 
         split_key = split if split in SPLIT_FILES else "test"
         filename = SPLIT_FILES[split_key]
