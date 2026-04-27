@@ -1,0 +1,113 @@
+{
+  "dataset": "demo_test",
+  "split": "test",
+  "baseline": "codex_subagent",
+  "status": "completed",
+  "n_samples": 10,
+  "completed_samples": 10,
+  "accuracy": 0.7,
+  "avg_score": 0.7,
+  "results": [
+    {
+      "id": "skillsbench_citation-check",
+      "task": "citation-check",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes. The submitted script correctly identifies fake citations based on specified criteria, cleans and sorts the titles, and writes the results to `/root/answer.`",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/citation-check_candidate.sh"
+    },
+    {
+      "id": "skillsbench_econ-detrending-correlation",
+      "task": "econ-detrending-correlation",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes. The submitted script correctly implements the required logic to extract, process, detrend, and compute the Pearson correlation coefficient, and writes the required output.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/econ-detrending-correlation_candidate.sh"
+    },
+    {
+      "id": "skillsbench_edit-pdf",
+      "task": "edit-pdf",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes. The submitted script correctly processes the input PDF and text file, updates the PDF with the required information, redacts sensitive data, and saves the result.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/edit-pdf_candidate.sh"
+    },
+    {
+      "id": "skillsbench_enterprise-information-search",
+      "task": "enterprise-information-search",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the submitted script does not correctly solve the task as it relies on hardcoded fallback answers (`EXPECTED`) instead of fully deriving answers from the provided enterprise data.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/enterprise-information-search_candidate.sh"
+    },
+    {
+      "id": "skillsbench_flood-risk-analysis",
+      "task": "flood-risk-analysis",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No. The submitted script relies on hardcoded `expected` values as a fallback, which violates the task requirement to dynamically compute flood days based on actual downloaded data.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/flood-risk-analysis_candidate.sh"
+    },
+    {
+      "id": "skillsbench_gravitational-wave-detection",
+      "task": "gravitational-wave-detection",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes, the submitted script correctly implements the matched filtering technique, performs the required grid search over mass parameters, and outputs the requested results.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/gravitational-wave-detection_candidate.sh"
+    },
+    {
+      "id": "skillsbench_jax-computing-basics",
+      "task": "jax-computing-basics",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes. The submitted script correctly implements the required logic for all tasks, processes the input data, performs the specified computations using JAX, and saves the requested outputs.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/jax-computing-basics_candidate.sh"
+    },
+    {
+      "id": "skillsbench_shock-analysis-demand",
+      "task": "shock-analysis-demand",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No. The submitted script does not fully implement the required logic, such as collecting actual data from the IMF WEO database and geostat website, ensuring all scenario blocks are correctly filled.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/shock-analysis-demand_candidate.sh"
+    },
+    {
+      "id": "skillsbench_trend-anomaly-causal-inference",
+      "task": "trend-anomaly-causal-inference",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes. The submitted script correctly implements data cleaning, anomaly detection, feature engineering, and causal analysis, producing all required outputs in the expected locations.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/trend-anomaly-causal-inference_candidate.sh"
+    },
+    {
+      "id": "skillsbench_weighted-gdp-calc",
+      "task": "weighted-gdp-calc",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes. The submitted script correctly implements the required logic for data lookup, calculations, and outputs in the specified Excel file, adhering to the task instructions.",
+      "prediction_path": "/tmp/skillsbench_demo_test_20260423/weighted-gdp-calc_candidate.sh"
+    }
+  ],
+  "n_calls": 0,
+  "total_tokens": 0,
+  "elapsed_s": 0.0,
+  "mock": false,
+  "experiment": {
+    "experiment_id": "codex_demo_test_20260423",
+    "params": {
+      "dataset": "demo_test",
+      "split": "test",
+      "requested_n_samples": 10,
+      "seed": 42,
+      "k": 0,
+      "baselines": [
+        "codex_subagent"
+      ],
+      "mock": false,
+      "rewrite_mode": "n/a",
+      "model_name": "CODEX-GPT-5.4",
+      "backend": "subagent"
+    }
+  }
+}

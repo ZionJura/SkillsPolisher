@@ -10,7 +10,7 @@ from typing import List, Optional
 from eval_pipeline.datasets.base import EvalSample
 from eval_pipeline.llm_client import LLMClient
 from .base import Baseline
-from .zero_shot import _format_choices, MATH_DATASETS, SKILL_DATASETS
+from .zero_shot import _format_choices, MATH_DATASETS, SKILL_DATASETS, SCRIPT_ONLY_DATASETS
 
 
 def _format_demo(demo: EvalSample, dataset_name: str = "", idx: int = 0) -> str:
@@ -53,6 +53,22 @@ class RandomKShotBaseline(Baseline):
 
     name = "random_kshot"
 
+    @staticmethod
+    def _extract_demo_skills(samples: List[EvalSample]) -> List[str]:
+        skills = []
+        for sample in samples:
+            names = sample.metadata.get("skill_names", [])
+            if isinstance(names, str):
+                names = [names]
+            if not names:
+                skill_name = sample.metadata.get("skill_name")
+                if skill_name:
+                    names = [skill_name]
+            for name in names:
+                if name and name not in skills:
+                    skills.append(name)
+        return skills
+
     def __init__(
         self,
         llm_client: Optional[LLMClient] = None,
@@ -78,17 +94,25 @@ class RandomKShotBaseline(Baseline):
             n = min(self.k, len(self.train_samples))
             self._selected_demos = self._rng.sample(self.train_samples, n)
 
-    def _build_system_prompt(self) -> str:
+    def _build_system_prompt(self, sample: EvalSample) -> str:
         if self.dataset_name in MATH_DATASETS:
             return (
                 "You are an expert mathematician. "
                 "Learn from the examples below and solve the new problem step by step."
             )
         if self.dataset_name in SKILL_DATASETS:
-            return (
+            prompt = (
                 "You are an expert at executing skill-based tasks. "
                 "Learn from the examples and apply the same approach to new tasks."
             )
+            if sample.context:
+                prompt += f"\n\nAvailable Skills:\n{sample.context}"
+            if self.dataset_name in SCRIPT_ONLY_DATASETS:
+                prompt += (
+                    "\n\nReturn only a complete executable bash script. "
+                    "No markdown fences. No explanations."
+                )
+            return prompt
         return (
             "You are a helpful, accurate assistant. "
             "Learn from the examples below and answer the new question."
@@ -133,6 +157,12 @@ class RandomKShotBaseline(Baseline):
                 parts.append("Provide your final numeric answer after '####'.")
         elif self.dataset_name == "strategyqa":
             parts.append("Answer with 'Yes' or 'No'.")
+        elif self.dataset_name in SCRIPT_ONLY_DATASETS:
+            parts.append(
+                "Return only the final executable bash script. "
+                "The first line must be '#!/usr/bin/env bash' or '#!/bin/bash'. "
+                "Do not include markdown fences or explanatory text."
+            )
 
         parts.append("Answer:")
 
@@ -148,8 +178,13 @@ class RandomKShotBaseline(Baseline):
 
         # Limit to k
         effective_demos = effective_demos[: self.k]
+        self.set_last_trace(
+            used_skills=self._extract_demo_skills(effective_demos),
+            demo_ids=[d.id for d in effective_demos],
+            prompt_mode="random_kshot",
+        )
 
-        system_prompt = self._build_system_prompt()
+        system_prompt = self._build_system_prompt(sample)
         user_prompt = self._build_user_prompt(sample, effective_demos)
 
         messages = [
@@ -157,11 +192,12 @@ class RandomKShotBaseline(Baseline):
             {"role": "user", "content": user_prompt},
         ]
 
-        return self.llm.chat(
+        prediction = self.llm.chat(
             messages=messages,
             max_tokens=self.max_tokens,
             temperature=self.temperature,
         )
+        return self.finalize_prediction(sample, system_prompt, user_prompt, prediction)
 
     def set_train_samples(self, samples: List[EvalSample]) -> None:
         """Update the pool of training samples and re-sample demos."""

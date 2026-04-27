@@ -41,14 +41,33 @@ python scripts/verify_setup.py --no-api  # skip API connectivity test
 
 ```bash
 # Single baseline, mock LLM (offline)
-python eval_pipeline/run_eval.py --dataset gsm8k --baseline zero_shot --n_samples 50 --mock
+python eval_pipeline/run_eval.py --dataset gsm8k --baseline zero_shot --n_samples 10 --mock
 
 # Compare all baselines
-python eval_pipeline/run_compare.py --dataset gsm8k --n_samples 50 --mock
+python eval_pipeline/run_compare.py --dataset gsm8k --n_samples 10 --mock --model_name gpt-5.4-mini
 
-# Real API
-python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 88
+# Real API, ByteDance route via model alias gpt-4-o
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 10 --model_name gpt-4-o
+
+# Real API, zhizengzeng route for all other models
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 10 --model_name deepseek-v3
+
+# Force rerun even if the same experiment already completed
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 10 --model_name gpt-4-o --rerun
 ```
+
+### 6. Research iteration workflow
+
+The repository standard workflow for research experiments is documented in:
+
+- [SKILL.md](/Users/bytedance/Documents/code/SkillsPolisher/SKILL.md)
+
+Default policy:
+
+- iterate with `10` samples first
+- save structured outputs under `./results/{model_name}/{dataset_name}/`
+- save aggregate statistics to `./statistics/results.csv`
+- summarize each completed experiment in `./report/report.md`
 
 ---
 
@@ -129,7 +148,11 @@ SkillsPolisher/
 
 ## API Configuration
 
-The pipeline defaults to the **zhizengzeng** OpenAI-compatible proxy, which routes to GPT-4o, Claude, Gemini, etc. Configure in `eval_pipeline/configs/eval_config.json`:
+The pipeline supports two backends:
+- `gpt-4-o` routes to the internal ByteDance Azure endpoint
+- all other `--model_name` values route to the **zhizengzeng** OpenAI-compatible proxy
+
+Configure defaults in `eval_pipeline/configs/eval_config.json`:
 
 ```json
 {
@@ -141,7 +164,18 @@ The pipeline defaults to the **zhizengzeng** OpenAI-compatible proxy, which rout
 }
 ```
 
-Model tier shortcuts (set `--model` in run scripts):
+Recommended usage is to pass `--model_name` on the command line:
+
+```bash
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 88 --model_name gpt-4-o
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 88 --model_name gpt-5.4-mini
+```
+
+Special routing rule:
+- `--model_name gpt-4-o` → ByteDance API
+- any other model name → zhizengzeng API
+
+Model tier shortcuts inside the codebase map to:
 
 | Alias | Model |
 |-------|-------|
@@ -152,6 +186,9 @@ Model tier shortcuts (set `--model` in run scripts):
 | `claude` | `claude-sonnet-4-6` |
 
 Use `--mock` for fully offline testing (no API calls).
+
+Zhizengzeng supported models and pricing snapshot:
+- [ZHIZENG_MODEL.md](/Users/bytedance/Documents/code/SkillsPolisher/ZHIZENG_MODEL.md)
 
 ---
 
@@ -186,5 +223,10 @@ python splice/run_full_eval.py --dataset skillsbench --n_samples 20 --mock
 ## Development Notes
 
 - All scripts must be run from the project root (the directory containing `eval_pipeline/`).
-- Results are saved to `eval_pipeline/results/` as JSON files.
+- New experiment results are saved under `./results/{model_name}/{dataset_name}/`.
+- `run_compare.py` writes `compare_result.json` plus per-method files like `zero_shot_result.json`.
+- `run_eval.py` writes directly to `./results/{model_name}/{dataset_name}/{baseline}_result.json`.
+- If legacy flat files exist under `./results/{model_name}/`, the code migrates them into dataset subdirectories automatically.
+- Repeated runs with the same experiment signature are skipped unless `--rerun` is passed.
+- Experiment summaries are appended or updated in `./statistics/results.csv`.
 - The `--mock` flag uses a deterministic mock LLM — safe for CI and offline development.

@@ -1,0 +1,123 @@
+{
+  "dataset": "demo_test_case",
+  "split": "test",
+  "baseline": "codex_case_subagent",
+  "status": "completed",
+  "n_samples": 10,
+  "completed_samples": 10,
+  "accuracy": 0.3,
+  "avg_score": 0.3,
+  "results": [
+    {
+      "id": "skillsbench_citation-check",
+      "task": "citation-check",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the submitted script uses only heuristic checks and does not actually verify citations against academic databases as required by the task.",
+      "delta_vs_codex_subagent": "degraded",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/citation-check_candidate.sh"
+    },
+    {
+      "id": "skillsbench_econ-detrending-correlation",
+      "task": "econ-detrending-correlation",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes, the script correctly extracts, deflates, detrends, and correlates the required series and writes the rounded result to /root/answer.txt as specified.",
+      "delta_vs_codex_subagent": "same",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/econ-detrending-correlation_candidate.sh"
+    },
+    {
+      "id": "skillsbench_edit-pdf",
+      "task": "edit-pdf",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the script does not ensure that sensitive information is redacted as instructed in the text file and may not always place updated information precisely on form fields.",
+      "delta_vs_codex_subagent": "degraded",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/edit-pdf_candidate.sh"
+    },
+    {
+      "id": "skillsbench_enterprise-information-search",
+      "task": "enterprise-information-search",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the script does not fully solve the task because it uses heuristics that may miss required reviewers and competitor demo URLs, and does not robustly answer all parts.",
+      "delta_vs_codex_subagent": "same",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/enterprise-information-search_candidate.sh"
+    },
+    {
+      "id": "skillsbench_flood-risk-analysis",
+      "task": "flood-risk-analysis",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes, the submitted script correctly implements all required logic to identify stations with flooding during April 1-7, 2025, and outputs the results in the specified format.",
+      "delta_vs_codex_subagent": "improved",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/flood-risk-analysis_candidate.sh"
+    },
+    {
+      "id": "skillsbench_gravitational-wave-detection",
+      "task": "gravitational-wave-detection",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the script incorrectly sets the template's time shift and lower frequency cutoff, which may lead to inaccurate matched filtering and SNR results.",
+      "delta_vs_codex_subagent": "degraded",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/gravitational-wave-detection_candidate.sh"
+    },
+    {
+      "id": "skillsbench_jax-computing-basics",
+      "task": "jax-computing-basics",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the script does not handle loading and saving of structured npz files correctly, as it uses np.load without the required handling for the task data.",
+      "delta_vs_codex_subagent": "degraded",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/jax-computing-basics_candidate.sh"
+    },
+    {
+      "id": "skillsbench_shock-analysis-demand",
+      "task": "shock-analysis-demand",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, because the script uses Python to automate Excel file creation and population, which violates the instruction to use ONLY Excel (no Python or code).",
+      "delta_vs_codex_subagent": "same",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/shock-analysis-demand_candidate.sh"
+    },
+    {
+      "id": "skillsbench_trend-anomaly-causal-inference",
+      "task": "trend-anomaly-causal-inference",
+      "correct": false,
+      "score": 0.0,
+      "details": "judge_no: No, the submitted script does not perform proper causal DiD analysis and the evaluation logic is not faithful enough to the task requirements.",
+      "delta_vs_codex_subagent": "degraded",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/trend-anomaly-causal-inference_candidate.sh"
+    },
+    {
+      "id": "skillsbench_weighted-gdp-calc",
+      "task": "weighted-gdp-calc",
+      "correct": true,
+      "score": 1.0,
+      "details": "judge_yes: Yes, the script correctly fills the required cells with appropriate Excel formulas for all steps, using only the specified sheets and without altering the formatting.",
+      "delta_vs_codex_subagent": "same",
+      "prediction_path": "/tmp/skillsbench_demo_test_case_20260423/weighted-gdp-calc_candidate.sh"
+    }
+  ],
+  "n_calls": 0,
+  "total_tokens": 0,
+  "elapsed_s": 0.0,
+  "mock": false,
+  "experiment": {
+    "experiment_id": "codex_demo_test_case_20260423",
+    "params": {
+      "dataset": "demo_test_case",
+      "split": "test",
+      "requested_n_samples": 10,
+      "seed": 42,
+      "k": 3,
+      "baselines": [
+        "codex_case_subagent"
+      ],
+      "mock": false,
+      "rewrite_mode": "n/a",
+      "model_name": "CODEX-GPT-5.4",
+      "backend": "subagent_case"
+    }
+  }
+}

@@ -99,6 +99,18 @@ def _download_url(url: str, dest: Path, label: str = "") -> bool:
         return False
 
 
+def _download_first_available(urls: list[str], dest: Path, label: str = "") -> bool:
+    """Try multiple URLs until one succeeds."""
+    last_error = None
+    for url in urls:
+        if _download_url(url, dest, label):
+            return True
+        last_error = url
+    if last_error:
+        print(f"  ERROR: all candidate URLs failed for {label or dest.name}")
+    return False
+
+
 # ── Per-dataset downloaders ───────────────────────────────────────────────────
 
 def download_aqua_rat(data_dir: Path, force: bool) -> bool:
@@ -314,13 +326,6 @@ def download_strategyqa(data_dir: Path, force: bool) -> bool:
         print("  ERROR: 'datasets' not installed. Run: pip install datasets")
         return False
 
-    print("  Loading wics/strategy-qa from HuggingFace...")
-    try:
-        ds = load_dataset("wics/strategy-qa", trust_remote_code=True)
-    except Exception as e:
-        print(f"  ERROR loading dataset: {e}")
-        return False
-
     fieldnames = ["id", "question", "answer", "facts", "decomposition"]
 
     def _bool_to_yn(val):
@@ -333,54 +338,117 @@ def download_strategyqa(data_dir: Path, force: bool) -> bool:
             return "no"
         return s
 
-    # wics/strategy-qa may only have 'test' split (the original labeled set)
-    split_map = {}
-    for split_name in ("test", "validation", "train"):
-        if split_name in ds:
-            split_map[split_name] = split_name
-
-    # Map HF splits to output files
-    output_map = [
-        (["test", "validation"], test_file),
-        (["train"], train_file),
-    ]
-
-    ok = False
-    for candidate_splits, csv_path in output_map:
-        if csv_path.exists() and not force:
-            print(f"  [skip] {csv_path.name} already exists")
-            ok = True
-            continue
-        chosen = None
-        for s in candidate_splits:
-            if s in ds:
-                chosen = s
-                break
-        if chosen is None:
-            print(f"  [warn] No suitable split found for {csv_path.name}, skipping")
-            continue
-        split_data = ds[chosen]
-        print(f"  Writing {csv_path.name} (from HF split '{chosen}', {len(split_data)} rows)...")
+    def _write_rows(rows, csv_path: Path, source_label: str) -> bool:
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
-            for row in split_data:
+            n_rows = 0
+            for row in rows:
+                evidence = row.get("facts")
+                if evidence is None:
+                    evidence = row.get("evidence", [])
                 writer.writerow({
                     "id": row.get("qid", row.get("id", "")),
                     "question": row.get("question", ""),
-                    "answer": _bool_to_yn(row.get("answer", "")),
-                    "facts": repr(row.get("facts", [])),
+                    "answer": _bool_to_yn(row.get("answer", row.get("label", ""))),
+                    "facts": repr(evidence or []),
                     "decomposition": repr(row.get("decomposition", row.get("steps", []))),
                 })
-        print(f"  OK: {csv_path.name}")
-        ok = True
+                n_rows += 1
+        print(f"  OK: {csv_path.name} ({n_rows} rows from {source_label})")
+        return n_rows > 0
 
-    return ok
+    print("  Loading wics/strategy-qa from HuggingFace...")
+    try:
+        ds = load_dataset("wics/strategy-qa")
+        ok = False
+
+        output_map = [
+            (["test", "validation"], test_file),
+            (["train"], train_file),
+        ]
+        for candidate_splits, csv_path in output_map:
+            if csv_path.exists() and not force:
+                print(f"  [skip] {csv_path.name} already exists")
+                ok = True
+                continue
+            chosen = next((s for s in candidate_splits if s in ds), None)
+            if chosen is None:
+                print(f"  [warn] No suitable split found for {csv_path.name}")
+                continue
+            ok = _write_rows(ds[chosen], csv_path, f"HF split '{chosen}'") or ok
+
+        if test_file.exists() and not train_file.exists():
+            shutil.copy2(test_file, train_file)
+            print("  [warn] No train split available; copied test split to strategyqa_train.csv")
+
+        return ok and test_file.exists() and train_file.exists()
+    except Exception as e:
+        print(f"  [warn] HuggingFace loader failed, falling back to raw JSON: {e}")
+
+    raw_specs = [
+        (
+            "strategyqa_test.json",
+            test_file,
+            [
+                "https://huggingface.co/datasets/voidful/StrategyQA/resolve/main/strategyqa_test.json",
+                "https://huggingface.co/datasets/njf/StrategyQA/resolve/main/strategyqa_test.json",
+            ],
+        ),
+        (
+            "strategyqa_train.json",
+            train_file,
+            [
+                "https://huggingface.co/datasets/voidful/StrategyQA/resolve/main/strategyqa_train.json",
+                "https://huggingface.co/datasets/voidful/StrategyQA/resolve/main/strategyqa_train_filtered.json",
+                "https://huggingface.co/datasets/njf/StrategyQA/resolve/main/strategyqa_train.json",
+                "https://huggingface.co/datasets/ChilleD/StrategyQA/resolve/main/train.json",
+            ],
+        ),
+    ]
+
+    ok = True
+    for raw_name, csv_path, urls in raw_specs:
+        raw_path = data_dir / raw_name
+        if not csv_path.exists() or force:
+            print(f"  Downloading {raw_name} from fallback source...")
+            if not _download_first_available(urls, raw_path, raw_name):
+                ok = False
+                continue
+
+            try:
+                with open(raw_path, "r", encoding="utf-8") as f:
+                    raw = json.load(f)
+            except Exception as e:
+                print(f"  ERROR reading {raw_name}: {e}")
+                ok = False
+                raw_path.unlink(missing_ok=True)
+                continue
+
+            rows = raw if isinstance(raw, list) else raw.get("data", raw.get("examples", []))
+            if not isinstance(rows, list):
+                print(f"  ERROR: unexpected format in {raw_name}: {type(raw).__name__}")
+                ok = False
+                raw_path.unlink(missing_ok=True)
+                continue
+
+            ok = _write_rows(rows, csv_path, raw_name) and ok
+            raw_path.unlink(missing_ok=True)
+
+    if test_file.exists() and not train_file.exists():
+        shutil.copy2(test_file, train_file)
+        print("  [warn] Train fallback unavailable; copied test split to strategyqa_train.csv")
+
+    return ok and test_file.exists() and train_file.exists()
 
 
 def download_bpo(data_dir: Path, force: bool) -> bool:
     """Download BPO test files from THUDM/BPO GitHub."""
-    base_url = "https://raw.githubusercontent.com/THUDM/BPO/main/data/testset/"
+    base_urls = [
+        "https://raw.githubusercontent.com/thu-coai/BPO/main/data/testset/",
+        "https://raw.githubusercontent.com/THUDM/BPO/main/data/testset/",
+        "https://raw.githubusercontent.com/thu-coai/BPO/master/data/testset/",
+    ]
     files = ["bpo_test.json", "dolly_eval.json", "self_instruct_eval.json"]
     ok = True
     for fname in files:
@@ -388,10 +456,10 @@ def download_bpo(data_dir: Path, force: bool) -> bool:
         if _skip(dest, force, fname):
             continue
         print(f"  Downloading {fname}...")
-        success = _download_url(base_url + fname, dest, fname)
+        success = _download_first_available([base + fname for base in base_urls], dest, fname)
         if not success:
             ok = False
-    return ok
+    return ok and all((data_dir / fname).exists() for fname in files)
 
 
 def download_skillsbench(data_dir: Path, force: bool) -> bool:
@@ -441,19 +509,50 @@ def download_skillsbench(data_dir: Path, force: bool) -> bool:
 
 
 def download_demo_bank(data_dir: Path, force: bool) -> bool:
-    """Copy splice/data/demo_bank.json into data/demo_bank/demo_bank.json."""
+    """Copy or build demo_bank.json into eval_pipeline/datasets/data/demo_bank/."""
     dest = data_dir / "demo_bank.json"
     if _skip(dest, force, "demo_bank.json"):
         return True
 
     src = PROJECT_ROOT / "splice" / "data" / "demo_bank.json"
-    if not src.exists():
-        print(f"  ERROR: source not found: {src}")
+    if src.exists():
+        shutil.copy2(str(src), str(dest))
+        print("  OK: demo_bank.json (copied from splice/data/)")
+        return True
+
+    print(f"  [warn] source not found: {src}")
+    print("  Building demo bank from local skillsbench tasks instead...")
+
+    skillsbench_root = DATA_DIR / "skillsbench"
+    tasks_dir = skillsbench_root / "tasks"
+    if not tasks_dir.exists():
+        print("  [info] skillsbench tasks not found locally; downloading first...")
+        if not download_skillsbench(skillsbench_root, force=False):
+            return False
+
+    try:
+        from splice.demo_bank import DemoBank
+    except ImportError as e:
+        print(f"  ERROR: could not import splice.demo_bank: {e}")
         return False
 
-    shutil.copy2(str(src), str(dest))
-    print(f"  OK: demo_bank.json (copied from splice/data/)")
-    return True
+    try:
+        bank = DemoBank(skillsbench_root=str(skillsbench_root))
+        max_tasks = sum(1 for p in tasks_dir.iterdir() if p.is_dir())
+        bank.build_from_tasks(max_tasks=max_tasks, verbose=False)
+        if len(bank) == 0:
+            print("  ERROR: built demo bank is empty")
+            return False
+        bank.save(str(dest))
+
+        cache_path = PROJECT_ROOT / "splice" / "data" / "demo_bank.json"
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(str(dest), str(cache_path))
+        print(f"  OK: demo_bank.json ({len(bank)} demos, generated from skillsbench)")
+        return True
+    except Exception as e:
+        print(f"  ERROR building demo_bank.json: {e}")
+        return False
 
 
 # ── Registry ──────────────────────────────────────────────────────────────────

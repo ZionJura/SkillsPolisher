@@ -17,6 +17,7 @@ from .base import Baseline
 MATH_DATASETS = {"gsm8k", "tabmwp", "finqa", "aqua_rat"}
 # Datasets that are skill-oriented
 SKILL_DATASETS = {"skillsbench", "demo_bank"}
+SCRIPT_ONLY_DATASETS = {"skillsbench"}
 
 
 def _format_choices(choices: List[str]) -> str:
@@ -63,11 +64,17 @@ class ZeroShotBaseline(Baseline):
         """Build the system prompt based on task type."""
         if self.dataset_name in SKILL_DATASETS or sample.context:
             if sample.context:
-                return (
+                prompt = (
                     "You are an expert at executing skill-based tasks. "
                     "Use the provided skill documentation to answer the question.\n\n"
                     f"Available Skills:\n{sample.context}"
                 )
+                if self.dataset_name in SCRIPT_ONLY_DATASETS:
+                    prompt += (
+                        "\n\nFor this task, return only a complete executable bash script. "
+                        "No markdown fences. No explanations."
+                    )
+                return prompt
         if self.dataset_name in MATH_DATASETS:
             return (
                 "You are an expert mathematician and problem solver. "
@@ -106,9 +113,13 @@ class ZeroShotBaseline(Baseline):
         elif self.dataset_name == "strategyqa":
             parts.append("\nAnswer with 'Yes' or 'No'.")
         elif self.dataset_name in SKILL_DATASETS:
-            parts.append(
-                "\nProvide a complete solution using the available skills."
-            )
+            parts.append("\nProvide a complete solution using the available skills.")
+            if self.dataset_name in SCRIPT_ONLY_DATASETS:
+                parts.append(
+                    "Return only the final executable bash script. "
+                    "The first line must be '#!/usr/bin/env bash' or '#!/bin/bash'. "
+                    "Do not include markdown fences or any explanatory text."
+                )
 
         return "\n".join(parts)
 
@@ -116,14 +127,24 @@ class ZeroShotBaseline(Baseline):
         """Generate a zero-shot prediction."""
         system_prompt = self._build_system_prompt(sample)
         user_prompt = self._build_user_prompt(sample)
+        used_skills = sample.metadata.get("skill_names")
+        if not used_skills:
+            skill_name = sample.metadata.get("skill_name")
+            used_skills = [skill_name] if skill_name else []
+        self.set_last_trace(
+            used_skills=list(used_skills),
+            demo_ids=[],
+            prompt_mode="zero_shot",
+        )
 
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ]
 
-        return self.llm.chat(
+        prediction = self.llm.chat(
             messages=messages,
             max_tokens=self.max_tokens,
             temperature=self.temperature,
         )
+        return self.finalize_prediction(sample, system_prompt, user_prompt, prediction)

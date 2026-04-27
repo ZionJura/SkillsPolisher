@@ -14,6 +14,86 @@ from .base import EvalDataset, EvalSample
 from .data_utils import resolve_data_path
 
 
+def _resolve_demo_bank_file(data_path: Optional[str] = None) -> str:
+    """Resolve demo_bank.json from an explicit path or the standard data dir."""
+    if data_path:
+        return str(data_path)
+    demo_root = resolve_data_path("demo_bank")
+    return str(demo_root / "demo_bank.json") if demo_root.is_dir() else str(demo_root)
+
+
+def load_demo_bank_records(data_path: Optional[str] = None) -> List[dict]:
+    """Load raw demo-bank records from disk."""
+    resolved_path = _resolve_demo_bank_file(data_path)
+    if not os.path.exists(resolved_path):
+        raise FileNotFoundError(f"Demo bank file not found: {resolved_path}")
+
+    try:
+        with open(resolved_path, "r", encoding="utf-8", errors="replace") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        raise ValueError(f"Error reading demo bank {resolved_path}: {e}") from e
+
+    if isinstance(data, list):
+        demos = data
+    elif isinstance(data, dict):
+        demos = data.get("demos", [])
+    else:
+        raise ValueError(f"Unexpected demo bank format: {type(data).__name__}")
+
+    return demos
+
+
+def build_skillsbench_demo_pool(data_path: Optional[str] = None) -> List[EvalSample]:
+    """
+    Convert demo-bank records into a non-leaking SkillsBench demo pool.
+
+    Each demo keeps the original task id so baselines can exclude the
+    corresponding evaluation task by matching `sample.id`.
+    """
+    demos = load_demo_bank_records(data_path)
+    samples: List[EvalSample] = []
+
+    for idx, demo in enumerate(demos):
+        task_id = str(demo.get("task_id", f"demo_{idx}")).strip()
+        instruction = str(demo.get("instruction", "")).strip()
+        invocation = str(demo.get("invocation", "")).strip()
+        if not task_id or not instruction or not invocation:
+            continue
+
+        skill_name = str(demo.get("skill_name", "")).strip()
+        skill_body = str(demo.get("skill_body", "")).strip()
+        category = str(demo.get("category", "")).strip()
+        difficulty = str(demo.get("difficulty", "")).strip()
+        tags = demo.get("tags", [])
+
+        samples.append(
+            EvalSample(
+                id=f"skillsbench_{task_id}",
+                question=instruction,
+                answer=invocation,
+                context=skill_body,
+                choices=[],
+                metadata={
+                    "task_name": task_id,
+                    "skill_name": skill_name,
+                    "skill_names": [skill_name] if skill_name else [],
+                    "skill_body": skill_body,
+                    "invocation": invocation,
+                    "outcome": str(demo.get("outcome", "")).strip(),
+                    "category": category,
+                    "difficulty": difficulty,
+                    "tags": tags,
+                    "demo_idx": idx,
+                    "source_dataset": "demo_bank",
+                    "raw_demo": demo,
+                },
+            )
+        )
+
+    return samples
+
+
 class DemoBankDataset(EvalDataset):
     """
     Demo Bank dataset: skill invocation demonstrations used by SPLICE.
@@ -23,41 +103,17 @@ class DemoBankDataset(EvalDataset):
 
     def __init__(self, split: str = "train", data_path: Optional[str] = None):
         self.split = split
-        if data_path:
-            self.data_path = str(data_path)
-        else:
-            # resolve_data_path returns the data/demo_bank/ dir; the file is inside it
-            _dir = resolve_data_path("demo_bank")
-            self.data_path = str(_dir / "demo_bank.json") if _dir.is_dir() else str(_dir)
+        self.data_path = _resolve_demo_bank_file(data_path)
         self._samples: List[EvalSample] = []
         self._raw_demos: List[dict] = []
         self._load()
 
     def _load(self) -> None:
         """Load and parse the demo bank JSON."""
-        if not os.path.exists(self.data_path):
-            raise FileNotFoundError(
-                f"Demo bank file not found: {self.data_path}"
-            )
-
-        try:
-            with open(self.data_path, "r", encoding="utf-8", errors="replace") as f:
-                data = json.load(f)
-        except (json.JSONDecodeError, IOError) as e:
-            raise ValueError(f"Error reading demo bank {self.data_path}: {e}") from e
-
-        # Handle both list format and dict format with 'demos' key
-        if isinstance(data, list):
-            demos = data
-        elif isinstance(data, dict):
-            demos = data.get("demos", [])
-        else:
-            raise ValueError(f"Unexpected demo bank format: {type(data).__name__}")
-
-        self._raw_demos = demos
+        self._raw_demos = load_demo_bank_records(self.data_path)
         self._samples = []
 
-        for idx, demo in enumerate(demos):
+        for idx, demo in enumerate(self._raw_demos):
             task_id = str(demo.get("task_id", f"demo_{idx}"))
             instruction = demo.get("instruction", "").strip()
             if not instruction:

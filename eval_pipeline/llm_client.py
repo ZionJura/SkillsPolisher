@@ -40,6 +40,10 @@ AZURE_HEADERS     = {"X-TT-LOGID": "bytebrain.aiops.faultscout_cn_zr"}
 
 DEFAULT_MODEL = "gpt-4o-2024-11-20"
 
+MODEL_ALIASES = {
+    "gpt-4-o": "gpt-4o-2024-11-20",
+}
+
 # Model tier shortcuts (same names work on both backends)
 MODEL_TIERS = {
     "fast":      "gpt-4o-mini",
@@ -51,6 +55,28 @@ MODEL_TIERS = {
     "gemini":    "gemini-2.5-pro",
     "deepseek":  "deepseek-v3",
 }
+
+
+def _resolve_model_name(raw_model: str) -> str:
+    """Resolve tier aliases and user-facing model aliases."""
+    tier_resolved = MODEL_TIERS.get(raw_model, raw_model)
+    return MODEL_ALIASES.get(tier_resolved, tier_resolved)
+
+
+def _infer_backend(raw_model: Optional[str], explicit_backend: Optional[str]) -> str:
+    """
+    Choose backend.
+
+    Rules:
+      1. Explicit backend arg/env wins.
+      2. Requested model name `gpt-4-o` uses ByteDance Azure.
+      3. Everything else defaults to zhizengzeng openai-compatible API.
+    """
+    if explicit_backend:
+        return explicit_backend.lower()
+    if raw_model and raw_model.strip().lower() == "gpt-4-o":
+        return "azure"
+    return "openai"
 
 
 class CostTracker:
@@ -113,18 +139,38 @@ class LLMClient:
         default_headers: Optional[dict] = None,
     ):
         raw_model = model or os.getenv("LLM_MODEL", DEFAULT_MODEL)
-        self.model = MODEL_TIERS.get(raw_model, raw_model)
-        self.backend = (backend or os.getenv("LLM_BACKEND", "openai")).lower()
+        explicit_backend = backend or os.getenv("LLM_BACKEND")
+        self.requested_model = raw_model
+        self.model = _resolve_model_name(raw_model)
+        self.backend = _infer_backend(raw_model, explicit_backend)
         self.mock_mode = mock_mode
         self.max_retries = max_retries
         self.cost_tracker = CostTracker()
         self._client = None
 
         # Store overrides for lazy init
-        self._base_url        = base_url or os.getenv("LLM_BASE_URL")
-        self._api_key         = api_key  or os.getenv("LLM_API_KEY")
-        self._azure_endpoint  = azure_endpoint
-        self._api_version     = api_version
+        if self.backend == "azure":
+            self._base_url = None
+            self._api_key = (
+                api_key
+                or os.getenv("AZURE_OPENAI_API_KEY")
+                or os.getenv("LLM_API_KEY")
+            )
+            self._azure_endpoint = azure_endpoint or os.getenv("AZURE_OPENAI_ENDPOINT")
+            self._api_version = api_version or os.getenv("AZURE_OPENAI_API_VERSION")
+        else:
+            self._base_url = (
+                base_url
+                or os.getenv("OPENAI_API_BASE")
+                or os.getenv("LLM_BASE_URL")
+            )
+            self._api_key = (
+                api_key
+                or os.getenv("OPENAI_API_KEY")
+                or os.getenv("LLM_API_KEY")
+            )
+            self._azure_endpoint = azure_endpoint
+            self._api_version = api_version
         self._default_headers = default_headers
 
     def _get_client(self):
@@ -156,7 +202,7 @@ class LLMClient:
     def chat(
         self,
         messages: list,
-        max_tokens: int = 2048,
+        max_tokens: int = 12048,
         temperature: float = 0.0,
     ) -> str:
         if self.mock_mode:
@@ -217,20 +263,20 @@ class LLMClient:
     def from_config(cls, config: dict, mock_mode: bool = False) -> "LLMClient":
         """Create from config dict (eval_config.json). Backend auto-detected."""
         llm_cfg = config.get("llm", config)
-        model = MODEL_TIERS.get(llm_cfg.get("model", DEFAULT_MODEL),
-                                 llm_cfg.get("model", DEFAULT_MODEL))
-        # Detect backend from config keys
-        backend = llm_cfg.get("backend", "openai")
-        if "azure_endpoint" in llm_cfg or "api_version" in llm_cfg:
-            backend = "azure"
+        model = llm_cfg.get("model", DEFAULT_MODEL)
+        backend = _infer_backend(model, llm_cfg.get("backend"))
         return cls(
             model=model,
             backend=backend,
             mock_mode=mock_mode,
-            base_url=llm_cfg.get("base_url"),
-            api_key=llm_cfg.get("api_key"),
-            azure_endpoint=llm_cfg.get("azure_endpoint"),
-            api_version=llm_cfg.get("api_version"),
+            base_url=llm_cfg.get("base_url") if backend == "openai" else None,
+            api_key=(
+                llm_cfg.get("api_key")
+                if backend == "openai"
+                else llm_cfg.get("azure_api_key")
+            ),
+            azure_endpoint=llm_cfg.get("azure_endpoint") if backend == "azure" else None,
+            api_version=llm_cfg.get("api_version") if backend == "azure" else None,
             default_headers=llm_cfg.get("default_headers"),
         )
 
@@ -240,4 +286,7 @@ class LLMClient:
     def __repr__(self) -> str:
         if self.mock_mode:
             return f"LLMClient(mode='mock', calls={self.cost_tracker.n_calls})"
-        return f"LLMClient(backend={self.backend!r}, model={self.model!r}, calls={self.cost_tracker.n_calls})"
+        return (
+            f"LLMClient(backend={self.backend!r}, model={self.model!r}, "
+            f"requested_model={self.requested_model!r}, calls={self.cost_tracker.n_calls})"
+        )

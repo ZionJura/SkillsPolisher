@@ -5,6 +5,7 @@ evaluators/__init__.py — Evaluator registry.
 from .base import Evaluator
 from .exact_match import ExactMatchEvaluator
 from .llm_eval import LLMEvaluator
+from .skillsbench import SkillsBenchEvaluator
 
 # Datasets that use LLM-based evaluation
 LLM_EVAL_DATASETS = {"bpo_test", "dolly_eval", "self_instruct_eval", "skillsbench"}
@@ -23,6 +24,8 @@ def get_evaluator(dataset_name: str, llm_client=None):
     Returns:
         Evaluator instance.
     """
+    if dataset_name == "skillsbench":
+        return SkillsBenchEvaluator(llm_client=llm_client)
     if dataset_name in LLM_EVAL_DATASETS:
         return LLMEvaluator(llm_client=llm_client)
     return ExactMatchEvaluator(dataset_name=dataset_name)
@@ -32,6 +35,7 @@ __all__ = [
     "Evaluator",
     "ExactMatchEvaluator",
     "LLMEvaluator",
+    "SkillsBenchEvaluator",
     "LLM_EVAL_DATASETS",
     "EXACT_MATCH_DATASETS",
     "get_evaluator",

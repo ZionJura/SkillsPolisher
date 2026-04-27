@@ -1,0 +1,39 @@
+{
+  "dataset": "demo_test",
+  "split": "test",
+  "n_samples": 10,
+  "seed": 42,
+  "mock": false,
+  "status": "completed",
+  "completed_baselines": 1,
+  "total_baselines": 1,
+  "baselines": [
+    "codex_subagent"
+  ],
+  "summary": {
+    "codex_subagent": {
+      "accuracy": 0.7,
+      "avg_score": 0.7,
+      "completed_samples": 10,
+      "status": "completed",
+      "total_samples": 10
+    }
+  },
+  "experiment": {
+    "experiment_id": "codex_demo_test_20260423",
+    "params": {
+      "dataset": "demo_test",
+      "split": "test",
+      "requested_n_samples": 10,
+      "seed": 42,
+      "k": 0,
+      "baselines": [
+        "codex_subagent"
+      ],
+      "mock": false,
+      "rewrite_mode": "n/a",
+      "model_name": "CODEX-GPT-5.4",
+      "backend": "subagent"
+    }
+  }
+}

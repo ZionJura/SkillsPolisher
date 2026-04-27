@@ -4,7 +4,7 @@ Unified evaluation pipeline for benchmarking SPLICE against baselines across mul
 
 ## Setup
 
-Run all commands from the project root: `/mnt/d/Code/AI4R/Skills-Learning2/`
+Run all commands from the project root.
 
 ```bash
 pip install openai numpy
@@ -22,11 +22,11 @@ python eval_pipeline/run_eval.py --dataset gsm8k --split test \
 
 # AQUA-RAT dev, random k-shot
 python eval_pipeline/run_eval.py --dataset aqua_rat --split dev \
-    --baseline random_kshot --k 3 --n_samples 20 --mock
+    --baseline random_kshot --k 3 --n_samples 10 --mock
 
 # Compare all baselines on StrategyQA
 python eval_pipeline/run_compare.py --dataset strategyqa --split test \
-    --n_samples 20 --mock
+    --n_samples 10 --mock --model_name gpt-5.4-mini
 ```
 
 ## run_eval.py — Single Baseline Evaluation
@@ -39,7 +39,8 @@ python eval_pipeline/run_eval.py \
     --n_samples <N>         # 0 = all samples
     --k <K>                 # demos for k-shot (default: 3)
     --seed <S>              # random seed (default: 42)
-    --output <path.json>    # output file (default: results/<dataset>_<baseline>.json)
+    --output <path.json>    # output file (default: ./results/{model_name}/{dataset_name}/{baseline}_result.json)
+    --model_name <model>    # gpt-4-o -> ByteDance API, others -> zhizengzeng
     --mock                  # offline testing (no API calls)
     --verbose               # print each prediction
 ```
@@ -49,43 +50,43 @@ python eval_pipeline/run_eval.py \
 ```bash
 # AQUA-RAT (254 dev samples)
 python eval_pipeline/run_eval.py --dataset aqua_rat --split dev \
-    --baseline zero_shot --n_samples 100 --mock
+    --baseline zero_shot --n_samples 10 --mock
 
 # GSM8K (1319 test samples)
 python eval_pipeline/run_eval.py --dataset gsm8k --split test \
-    --baseline random_kshot --k 3 --n_samples 100 --mock
+    --baseline random_kshot --k 3 --n_samples 10 --mock
 
 # TabMWP (7686 test samples)
 python eval_pipeline/run_eval.py --dataset tabmwp --split test \
-    --baseline zero_shot --n_samples 100 --mock
+    --baseline zero_shot --n_samples 10 --mock
 
 # FinQA (~8600 test samples)
 python eval_pipeline/run_eval.py --dataset finqa --split test \
-    --baseline case_bandit --k 3 --n_samples 50 --mock
+    --baseline case_bandit --k 3 --n_samples 10 --mock
 
 # StrategyQA (~490 test samples)
 python eval_pipeline/run_eval.py --dataset strategyqa --split test \
-    --baseline zero_shot --n_samples 100 --mock
+    --baseline zero_shot --n_samples 10 --mock
 
 # BPO Test (200 samples)
 python eval_pipeline/run_eval.py --dataset bpo_test --split test \
-    --baseline bpo_rewrite --n_samples 50 --mock
+    --baseline bpo_rewrite --n_samples 10 --mock
 
 # Dolly Eval (200 samples)
 python eval_pipeline/run_eval.py --dataset dolly_eval --split test \
-    --baseline zero_shot --n_samples 50 --mock
+    --baseline zero_shot --n_samples 10 --mock
 
 # Self-Instruct Eval (252 samples)
 python eval_pipeline/run_eval.py --dataset self_instruct_eval --split test \
-    --baseline zero_shot --n_samples 50 --mock
+    --baseline zero_shot --n_samples 10 --mock
 
 # SkillsBench (89 tasks)
 python eval_pipeline/run_eval.py --dataset skillsbench --split test \
-    --baseline zero_shot --n_samples 20 --mock
+    --baseline zero_shot --n_samples 10 --mock
 
 # Demo Bank (88 demos)
 python eval_pipeline/run_eval.py --dataset demo_bank --split train \
-    --baseline zero_shot --n_samples 20 --mock
+    --baseline zero_shot --n_samples 10 --mock
 ```
 
 ## run_compare.py — Multi-Baseline Comparison
@@ -94,8 +95,19 @@ python eval_pipeline/run_eval.py --dataset demo_bank --split train \
 python eval_pipeline/run_compare.py \
     --dataset gsm8k \
     --split test \
-    --n_samples 100 \
+    --n_samples 10 \
+    --model_name gpt-5.4-mini \
     --mock
+```
+
+Real API examples:
+
+```bash
+# ByteDance API via model alias
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 10 --model_name gpt-4-o
+
+# zhizengzeng API
+python eval_pipeline/run_compare.py --dataset skillsbench --n_samples 10 --model_name deepseek-v3
 ```
 
 Output (console + JSON):
@@ -138,7 +150,11 @@ Results JSON:
 
 ## API Configuration
 
-The pipeline uses Azure OpenAI (internal ByteDance endpoint). Configure in `configs/eval_config.json`:
+Routing rule:
+- `--model_name gpt-4-o` uses the internal ByteDance Azure endpoint
+- all other model names use zhizengzeng
+
+Defaults can still be configured in `configs/eval_config.json`:
 
 ```json
 {
@@ -152,6 +168,9 @@ The pipeline uses Azure OpenAI (internal ByteDance endpoint). Configure in `conf
 ```
 
 If the endpoint is unreachable, use `--mock` for testing.
+
+Zhizengzeng model list and pricing snapshot:
+- [ZHIZENG_MODEL.md](/Users/bytedance/Documents/code/SkillsPolisher/ZHIZENG_MODEL.md)
 
 ## Dataset Registry
 
@@ -200,5 +219,28 @@ eval_pipeline/
 │   ├── exact_match.py      # ExactMatchEvaluator
 │   ├── llm_eval.py         # LLMEvaluator (judge)
 │   └── __init__.py         # get_evaluator()
-└── results/                # Output JSON files
+└── results/                # Project-level output root: ./results/{model_name}/{dataset_name}/
+```
+
+Current `run_compare.py` output location:
+
+```text
+./results/{model_name}/{dataset_name}/compare_result.json
+```
+
+It also writes per-method files such as:
+
+```text
+./results/{model_name}/{dataset_name}/zero_shot_result.json
+./results/{model_name}/{dataset_name}/random_kshot_result.json
+./results/{model_name}/{dataset_name}/case_bandit_result.json
+./results/{model_name}/{dataset_name}/bpo_rewrite_result.json
+```
+
+If the experiment has not been run before, that directory is created automatically. Legacy flat files under `./results/{model_name}/` are migrated into dataset directories on startup.
+
+Current `run_eval.py` output location:
+
+```text
+./results/{model_name}/{dataset_name}/{baseline}_result.json
 ```

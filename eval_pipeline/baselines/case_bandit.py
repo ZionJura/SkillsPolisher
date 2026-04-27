@@ -5,18 +5,18 @@ Uses CASEBandit from splice/splice_select.py to select k demos.
 """
 
 import sys
-import os
+from pathlib import Path
 from typing import List, Optional
 
 # Add project root to path for splice imports
-_PROJECT_ROOT = "/mnt/d/Code/AI4R/Skills-Learning2"
-if _PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, _PROJECT_ROOT)
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 
 from eval_pipeline.datasets.base import EvalSample
 from eval_pipeline.llm_client import LLMClient
 from .base import Baseline
-from .zero_shot import _format_choices, MATH_DATASETS
+from .zero_shot import _format_choices, MATH_DATASETS, SKILL_DATASETS, SCRIPT_ONLY_DATASETS
 from .random_kshot import _format_demo
 
 
@@ -41,6 +41,22 @@ class CASEBanditBaseline(Baseline):
     """
 
     name = "case_bandit"
+
+    @staticmethod
+    def _extract_demo_skills(samples: List[EvalSample]) -> List[str]:
+        skills = []
+        for sample in samples:
+            names = sample.metadata.get("skill_names", [])
+            if isinstance(names, str):
+                names = [names]
+            if not names:
+                skill_name = sample.metadata.get("skill_name")
+                if skill_name:
+                    names = [skill_name]
+            for name in names:
+                if name and name not in skills:
+                    skills.append(name)
+        return skills
 
     def __init__(
         self,
@@ -148,6 +164,18 @@ class CASEBanditBaseline(Baseline):
                 "You are an expert mathematician. "
                 "Use the examples to learn the solution pattern."
             )
+        elif self.dataset_name in SKILL_DATASETS:
+            system = (
+                "You are an expert at executing skill-based tasks. "
+                "Use the examples as references and solve the new task using the provided skills."
+            )
+            if sample.context:
+                system += f"\n\nAvailable Skills:\n{sample.context}"
+            if self.dataset_name in SCRIPT_ONLY_DATASETS:
+                system += (
+                    "\n\nReturn only a complete executable bash script. "
+                    "No markdown fences. No explanations."
+                )
         else:
             system = "You are a helpful assistant. Learn from the examples."
 
@@ -175,6 +203,12 @@ class CASEBanditBaseline(Baseline):
                 parts.append("Provide your final numeric answer after '####'.")
         elif self.dataset_name == "strategyqa":
             parts.append("Answer with 'Yes' or 'No'.")
+        elif self.dataset_name in SCRIPT_ONLY_DATASETS:
+            parts.append(
+                "Return only the final executable bash script. "
+                "The first line must be '#!/usr/bin/env bash' or '#!/bin/bash'. "
+                "Do not include markdown fences or explanatory text."
+            )
 
         parts.append("Answer:")
         return system, "\n".join(parts)
@@ -188,6 +222,11 @@ class CASEBanditBaseline(Baseline):
 
         # Filter out test sample
         selected = [d for d in selected if d.id != sample.id]
+        self.set_last_trace(
+            used_skills=self._extract_demo_skills(selected),
+            demo_ids=[d.id for d in selected],
+            prompt_mode="case_bandit",
+        )
 
         system, user = self._build_prompt(sample, selected)
         messages = [
@@ -195,11 +234,12 @@ class CASEBanditBaseline(Baseline):
             {"role": "user", "content": user},
         ]
 
-        return self.llm.chat(
+        prediction = self.llm.chat(
             messages=messages,
             max_tokens=self.max_tokens,
             temperature=self.temperature,
         )
+        return self.finalize_prediction(sample, system, user, prediction)
 
     def set_train_samples(self, samples: List[EvalSample]) -> None:
         """Update the pool of training samples."""

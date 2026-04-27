@@ -6,17 +6,18 @@ the question before sending to LLM.
 """
 
 import sys
+from pathlib import Path
 from typing import List, Optional
 
 # Add project root to path for splice imports
-_PROJECT_ROOT = "/mnt/d/Code/AI4R/Skills-Learning2"
-if _PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, _PROJECT_ROOT)
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
 
 from eval_pipeline.datasets.base import EvalSample
 from eval_pipeline.llm_client import LLMClient
 from .base import Baseline
-from .zero_shot import _format_choices, MATH_DATASETS, SKILL_DATASETS
+from .zero_shot import _format_choices, MATH_DATASETS, SKILL_DATASETS, SCRIPT_ONLY_DATASETS
 
 
 class BPORewriteBaseline(Baseline):
@@ -38,6 +39,25 @@ class BPORewriteBaseline(Baseline):
     """
 
     name = "bpo_rewrite"
+
+    @staticmethod
+    def _merge_skills(sample: EvalSample, demo_dicts: List[dict]) -> List[str]:
+        skills = []
+        sample_skills = sample.metadata.get("skill_names", [])
+        if isinstance(sample_skills, str):
+            sample_skills = [sample_skills]
+        if not sample_skills:
+            skill_name = sample.metadata.get("skill_name")
+            if skill_name:
+                sample_skills = [skill_name]
+        for name in sample_skills:
+            if name and name not in skills:
+                skills.append(name)
+        for demo in demo_dicts:
+            name = demo.get("skill_name")
+            if name and name not in skills:
+                skills.append(name)
+        return skills
 
     def __init__(
         self,
@@ -73,12 +93,26 @@ class BPORewriteBaseline(Baseline):
 
     def _sample_to_demo_dict(self, sample: EvalSample) -> dict:
         """Convert EvalSample to demo dict format expected by SkillPromptRewriter."""
+        raw_demo = sample.metadata.get("raw_demo")
+        if isinstance(raw_demo, dict):
+            return {
+                "instruction": str(raw_demo.get("instruction", sample.question)),
+                "skill_name": str(
+                    raw_demo.get(
+                        "skill_name",
+                        sample.metadata.get("skill_name", self.dataset_name),
+                    )
+                ),
+                "skill_body": str(raw_demo.get("skill_body", sample.context or "")),
+                "invocation": str(raw_demo.get("invocation", sample.answer or "")),
+                "outcome": str(raw_demo.get("outcome", "")),
+            }
         return {
             "instruction": sample.question,
             "skill_name": sample.metadata.get("skill_name", self.dataset_name),
             "skill_body": sample.context[:500] if sample.context else "",
-            "invocation": sample.question[:300],
-            "outcome": sample.answer[:200] if sample.answer else "",
+            "invocation": sample.answer if sample.answer else "",
+            "outcome": sample.metadata.get("outcome", ""),
         }
 
     def _get_demo_dicts(self, sample: EvalSample) -> List[dict]:
@@ -93,10 +127,16 @@ class BPORewriteBaseline(Baseline):
     def _build_system_prompt(self, rewritten_question: str, sample: EvalSample) -> str:
         """Build system prompt."""
         if self.dataset_name in SKILL_DATASETS and sample.context:
-            return (
+            prompt = (
                 "You are an expert at executing skill-based tasks.\n\n"
                 f"Available Skills:\n{sample.context}"
             )
+            if self.dataset_name in SCRIPT_ONLY_DATASETS:
+                prompt += (
+                    "\n\nReturn only a complete executable bash script. "
+                    "No markdown fences. No explanations."
+                )
+            return prompt
         if self.dataset_name in MATH_DATASETS:
             return (
                 "You are an expert mathematician. Solve problems step by step."
@@ -126,6 +166,12 @@ class BPORewriteBaseline(Baseline):
                 parts.append("Provide your final numeric answer after '####'.")
         elif self.dataset_name == "strategyqa":
             parts.append("\nAnswer with 'Yes' or 'No'.")
+        elif self.dataset_name in SCRIPT_ONLY_DATASETS:
+            parts.append(
+                "\nReturn only the final executable bash script. "
+                "The first line must be '#!/usr/bin/env bash' or '#!/bin/bash'. "
+                "Do not include markdown fences or explanatory text."
+            )
 
         return "\n".join(parts)
 
@@ -139,8 +185,11 @@ class BPORewriteBaseline(Baseline):
         # Get demo dicts for rewrite context
         if demos:
             demo_dicts = [self._sample_to_demo_dict(d) for d in demos[: self.k_demos]]
+            demo_ids = [d.id for d in demos[: self.k_demos]]
         else:
             demo_dicts = self._get_demo_dicts(sample)
+            pool = [s for s in self.train_samples if s.id != sample.id]
+            demo_ids = [d.id for d in pool[: self.k_demos]]
 
         # Rewrite the prompt
         try:
@@ -152,6 +201,13 @@ class BPORewriteBaseline(Baseline):
             # If rewriting fails, fall back to original question
             rewritten = skill_prompt
 
+        self.set_last_trace(
+            used_skills=self._merge_skills(sample, demo_dicts),
+            demo_ids=demo_ids,
+            prompt_mode="bpo_rewrite",
+            rewritten_question=rewritten,
+        )
+
         # Send rewritten question to LLM
         system = self._build_system_prompt(rewritten, sample)
         user = self._build_user_prompt(rewritten, sample)
@@ -161,11 +217,12 @@ class BPORewriteBaseline(Baseline):
             {"role": "user", "content": user},
         ]
 
-        return self.llm.chat(
+        prediction = self.llm.chat(
             messages=messages,
             max_tokens=self.max_tokens,
             temperature=self.temperature,
         )
+        return self.finalize_prediction(sample, system, user, prediction)
 
     def set_train_samples(self, samples: List[EvalSample]) -> None:
         """Update the pool of training samples."""

@@ -88,11 +88,11 @@ def _minimal_toml_parse(path: str) -> dict:
     return result
 
 
-def _read_file_safe(path: str, max_chars: int = 50000) -> str:
+def _read_file_safe(path: str, max_chars: Optional[int] = None) -> str:
     """Read a text file safely, returning empty string on error."""
     try:
         with open(path, "r", encoding="utf-8", errors="replace") as f:
-            content = f.read(max_chars)
+            content = f.read() if max_chars is None else f.read(max_chars)
         return content.strip()
     except (IOError, OSError):
         return ""
@@ -106,8 +106,14 @@ class SkillsBenchDataset(EvalDataset):
     """
 
     name = "skillsbench"
+    SUPPORTED_SPLITS = {"test"}
 
     def __init__(self, split: str = "test", data_root: Optional[str] = None):
+        if split not in self.SUPPORTED_SPLITS:
+            raise ValueError(
+                "SkillsBench only provides a test split in this repository. "
+                "There is no official train split for few-shot demo selection."
+            )
         self.split = split
         self.data_root = str(data_root or resolve_data_path("skillsbench"))
         self._samples: List[EvalSample] = []
@@ -115,10 +121,11 @@ class SkillsBenchDataset(EvalDataset):
 
     def _load(self) -> None:
         """Load all tasks from the tasks directory."""
-        tasks_dir = Path(self.data_root)
+        root = Path(self.data_root)
+        tasks_dir = root / "tasks" if (root / "tasks").is_dir() else root
         if not tasks_dir.exists():
             raise FileNotFoundError(
-                f"SkillsBench tasks directory not found: {self.data_root}"
+                f"SkillsBench tasks directory not found: {tasks_dir}"
             )
 
         self._samples = []
@@ -167,7 +174,7 @@ class SkillsBenchDataset(EvalDataset):
                 if skill_subdir.is_dir():
                     skill_md_path = skill_subdir / "SKILL.md"
                     if skill_md_path.exists():
-                        skill_body = _read_file_safe(str(skill_md_path), max_chars=10000)
+                        skill_body = _read_file_safe(str(skill_md_path))
                         if skill_body:
                             skill_names.append(skill_subdir.name)
                             skill_bodies.append(f"## Skill: {skill_subdir.name}\n\n{skill_body}")
@@ -177,7 +184,7 @@ class SkillsBenchDataset(EvalDataset):
 
         # Load reference solution
         solve_sh_path = task_dir / "solution" / "solve.sh"
-        reference_answer = _read_file_safe(str(solve_sh_path), max_chars=5000)
+        reference_answer = _read_file_safe(str(solve_sh_path))
 
         sample = EvalSample(
             id=f"skillsbench_{task_name}",
